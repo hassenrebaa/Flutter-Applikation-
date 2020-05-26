@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'my_flutter_app_icons.dart';
+
 
 class ChatDetails extends StatefulWidget {
   @override
