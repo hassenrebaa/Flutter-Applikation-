@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'chat_Details.dart';
+
 void main()  => runApp(
     MaterialApp(
         title : 'Energie App',
@@ -19,13 +21,12 @@ class Home extends StatefulWidget {
       home: Home(),
     );
   }
-
 }
 class _HomeState extends State<Home>{
   int _currentIndex = 0;
   final tabs=[
     Center(child: Text("cc"),),
-    Center(child: Text("noch in Bearbeitung"),),
+    Center(child : ChatDetails()),
     Center (child: Text("noch in Bearbeitung"),),
     Center(child: ListView(
       children: <Widget>[
