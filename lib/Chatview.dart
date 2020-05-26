@@ -33,7 +33,7 @@ class _ChatDetailsState extends State<ChatDetails> {
               children: <Widget>[
 
                 Text(
-                  'Selina Kyle',
+                  'Roby',
                   style: TextStyle(color: Colors.black),
                 ),
 
@@ -48,8 +48,7 @@ class _ChatDetailsState extends State<ChatDetails> {
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                Flexible(
-                  child: ListView.builder(
+                 ListView.builder(
                     itemCount: 1,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
@@ -59,23 +58,25 @@ class _ChatDetailsState extends State<ChatDetails> {
                           children: <Widget>[
                           Container(
                             alignment:Alignment.topLeft,
-                          width: 40,
-                          height: 40,
-                          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          width: 30,
+                          height: 30,
+                          margin: EdgeInsets.fromLTRB(0, 0, 350, 0),
                             child: CircleAvatar(
                               backgroundImage: AssetImage('Images/boticon.png'),
                               backgroundColor: Colors.white,
                               minRadius: 10,
                             ),),
                             Bubble(
-                              message: 'Hey Was kann für Sie tun  ?',
+                              message: "Herzlich willkommen bei unserer Energie-App!\nIch bin "
+                                  "ein Chatbot Meine Name ist Roby und bin da zu helfen",
                               isMe: true,
                             ),
 
                             Container(
                               width: 40,
                               height: 40,
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              //padding: new EdgeInsets.all(8.0),
+                              margin: EdgeInsets.fromLTRB(350, 0, 0, 0),
                               child: CircleAvatar(
                                 backgroundImage: AssetImage('Images/user.png'),
                                 backgroundColor: Colors.white,
@@ -92,7 +93,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                       );
                     },
                   ),
-                ),
+
               ],
             ),
           ),
@@ -165,7 +166,7 @@ class Bubble extends StatelessWidget {
       margin: EdgeInsets.all(5),
       padding: isMe ? EdgeInsets.only(right: 180) : EdgeInsets.only(left: 150),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+       crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Column(
             mainAxisAlignment:
@@ -185,8 +186,8 @@ class Bubble extends StatelessWidget {
                         1
                       ],
                       colors: [
-                        Color(0xFFF6D365),
-                        Color(0xFFFDA085),
+                        Colors.lightBlue,
+                        Colors.blue,
                       ])
                       : LinearGradient(
                       begin: Alignment.topRight,
@@ -219,7 +220,7 @@ class Bubble extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       message,
-                      textAlign: isMe ? TextAlign.end : TextAlign.start,
+                      textAlign: isMe ? TextAlign.start : TextAlign.end,
                       style: TextStyle(
                         color: isMe ? Colors.white : Colors.grey,
                       ),
