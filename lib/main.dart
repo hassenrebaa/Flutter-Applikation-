@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Chatview.dart';
+
+
+
 void main()  => runApp(
     MaterialApp(
         title : 'Energie App',
@@ -24,8 +28,21 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home>{
   int _currentIndex = 0;
   final tabs=[
-    Center(child: Text("cc"),),
-    Center(child: Text("noch in Bearbeitung"),),
+    Center(
+      child: Column(
+  children: <Widget>[
+    Container(
+      margin: const EdgeInsets.all(70.0),
+      alignment: Alignment.center,
+    child:  CircleAvatar(
+        radius: 100,
+        backgroundImage: AssetImage('Images/bot.png'),
+      ),
+    ),
+   Text("    Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
+  ],),
+  ),
+    Center(child: ChatDetails(),),
     Center (child: Text("noch in Bearbeitung"),),
     Center(child: ListView(
       children: <Widget>[
@@ -35,8 +52,7 @@ class _HomeState extends State<Home>{
           child: Text('Impressum\n',style: TextStyle(
   color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),),),
         Container(
-          margin: const EdgeInsets.only(top:20),
-          alignment: Alignment.center,
+          margin: const EdgeInsets.only(top:20,left: 50),
           child: Text("Chatbot-app\nV.1.1.0\nEntwecklet von:\nBensouda Hanae\nAzlouk Mohamed Yassine\nRebaa Hasse\nMorchid Abdelhamid",
             style: TextStyle(color: Colors.black54, fontSize: 15),
           ),
@@ -114,8 +130,6 @@ class _HomeState extends State<Home>{
         onTap: (index){{
           setState(() {
               _currentIndex = index;
-
-
           });
           }
         },
