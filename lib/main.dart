@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Chatview.dart';
+
+
+
 void main()  => runApp(
     MaterialApp(
         title : 'Energie App',
@@ -38,7 +42,7 @@ class _HomeState extends State<Home>{
    Text("    Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
   ],),
   ),
-    Center(child: Text("noch in Bearbeitung"),),
+    Center(child: ChatDetails(),),
     Center (child: Text("noch in Bearbeitung"),),
     Center(child: ListView(
       children: <Widget>[
