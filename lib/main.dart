@@ -30,17 +30,22 @@ class _HomeState extends State<Home>{
     Center(child: ListView(
       children: <Widget>[
         Container(
+          margin: const EdgeInsets.only(top: 30.0),
+          alignment: Alignment.center,
+          child: Text('Impressum\n',style: TextStyle(
+  color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),),),
+        Container(
           margin: const EdgeInsets.only(top:20),
           alignment: Alignment.center,
           child: Text("Chatbot-app\nV.1.1.0\nEntwecklet von:\nBensouda Hanae\nAzlouk Mohamed Yassine\nRebaa Hasse\nMorchid Abdelhamid",
-            style: TextStyle(color: Colors.blue, fontSize: 20),
+            style: TextStyle(color: Colors.black54, fontSize: 15),
           ),
         ),
         Container(
           margin: const EdgeInsets.only(top: 30.0),
           alignment: Alignment.center,
           child: Text(" Datenschuzterklärung\n", style: TextStyle(
-              color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
+              color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
 
@@ -52,7 +57,7 @@ class _HomeState extends State<Home>{
                 "Wenn Sie diese App benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, "
                 "welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht."
                 "Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich."
-            , style: TextStyle(color: Colors.lightBlueAccent,
+            , style: TextStyle(color: Colors.black45,
               fontSize: 20),),
         ),
         Container(
