@@ -36,7 +36,7 @@ class _HomeState extends State<Home>{
       alignment: Alignment.center,
     child:  CircleAvatar(
         radius: 100,
-        backgroundImage: AssetImage('Images/bot.png'),
+        backgroundImage: AssetImage('Images/bot.png'), // Hier Changes 
       ),
     ),
    Text("    Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
