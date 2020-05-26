@@ -49,9 +49,6 @@ flutter:
   uses-material-design: true
   assets:
     - Images/
-    - Icons/
-  fonts:
-      - family: MyCustomIcons
 
 
 
