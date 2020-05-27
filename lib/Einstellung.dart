@@ -45,36 +45,41 @@ class MyApp extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: (){},
-                  child:ListTile(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+  Expanded(
+                 child: ListTile(
                     title:Text('Benachrichtigung'),
-                    leading: Icon(Icons.settings, color:Colors.blue,),
+                    leading: Icon(Icons.settings, color:Colors.blue,),),),
 
+                  Container(
 
+                      padding:EdgeInsets.all(8.0) ,
+                      margin: EdgeInsets.all(8.0),
+                      alignment: Alignment.centerRight,
+                      child:Switch (
+                        value: isSwitched,
+                        onChanged: (value){
+                          isSwitched =value;
+                          print(isSwitched);
+                        },
+                        activeTrackColor: Colors.lightGreenAccent,
+                        activeColor: Colors.green,
+                      ),
 
                   ),
-                ),
-
-                new Container(
-
-                  padding:EdgeInsets.all(8.0) ,
-                  margin: EdgeInsets.all(8.0),
-                  alignment: Alignment.centerRight,
-                  child:Switch (
-                    value: isSwitched,
-                    onChanged: (value){
-                      isSwitched =value;
-                      print(isSwitched);
-                    },
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
+                    ],
                   ),
-                ),
-                new Container(
+                  ),
+
+      Container(
                   child:ListTile(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>Useranmelden()));
                     },
                     leading: Icon(Icons.person_add , color:Colors.blue),
+                    title: Text("Konto-hinzufügen")
                   ),
                   alignment: Alignment.bottomLeft,
 
@@ -84,10 +89,10 @@ class MyApp extends StatelessWidget {
 
 
               ],
-            )
+            ),
         ),
+        );
 
-      );
 
 
   }
