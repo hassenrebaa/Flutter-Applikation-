@@ -51,7 +51,7 @@ class _ChatDetailsState extends State<ChatDetails> {
             child: Column(
               children: <Widget>[
                  ListView.builder(
-                    itemCount:  messsages.length,
+                    itemCount:  1,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
