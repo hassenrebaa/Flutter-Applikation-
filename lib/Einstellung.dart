@@ -9,14 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   bool isSwitched =false ;
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chatbot-App',
-      home: Scaffold(
-
-        appBar: AppBar(
-          leading: Icon(Icons.keyboard_return),
-          title: Text('Einstellung'),
-        ),
+    return  Scaffold(
         body: Center(
             child: new ListView(
               children: <Widget>[
@@ -94,9 +87,9 @@ class MyApp extends StatelessWidget {
             )
         ),
 
-      ),
+      );
 
-    );
+
   }
 }
 

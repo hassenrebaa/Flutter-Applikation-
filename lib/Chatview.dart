@@ -134,14 +134,18 @@ class _ChatDetailsState extends State<ChatDetails> {
                   Expanded(
                     child: TextFormField(
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: InputDecoration.collapsed(
                         hintText: 'Schreiben Sie ',
                         border: InputBorder.none,
                       ),
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                      //  messsages.insert(index, Bubble(isMe: true,)),
+                      });
+                    },
                     icon: Icon(
                       Icons.send,
                       color: Color(0xff3E8DF3),
