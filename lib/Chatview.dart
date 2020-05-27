@@ -8,6 +8,8 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _ChatDetailsState extends State<ChatDetails> {
+  final messageInsert = TextEditingController();
+  List<Map> messsages = List();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +51,7 @@ class _ChatDetailsState extends State<ChatDetails> {
             child: Column(
               children: <Widget>[
                  ListView.builder(
-                    itemCount: 1,
+                    itemCount:  messsages.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
@@ -132,14 +134,18 @@ class _ChatDetailsState extends State<ChatDetails> {
                   Expanded(
                     child: TextFormField(
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: InputDecoration.collapsed(
                         hintText: 'Schreiben Sie ',
                         border: InputBorder.none,
                       ),
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                      //  messsages.insert(index, Bubble(isMe: true,)),
+                      });
+                    },
                     icon: Icon(
                       Icons.send,
                       color: Color(0xff3E8DF3),

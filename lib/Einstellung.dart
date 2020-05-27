@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -10,14 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   bool isSwitched =false ;
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chatbot-App',
-      home: Scaffold(
-
-        appBar: AppBar(
-          leading: Icon(Icons.keyboard_return),
-          title: Text('Einstellung'),
-        ),
+    return  Scaffold(
         body: Center(
             child: new ListView(
               children: <Widget>[
@@ -79,9 +71,13 @@ class MyApp extends StatelessWidget {
                 ),
                 new Container(
                   child:ListTile(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Useranmelden()));
+                    },
                     leading: Icon(Icons.person_add , color:Colors.blue),
                   ),
                   alignment: Alignment.bottomLeft,
+
                 ),
 
 
@@ -91,18 +87,34 @@ class MyApp extends StatelessWidget {
             )
         ),
 
-      ),
-
-    );
-
-
-
-
+      );
 
 
   }
 }
 
+class Useranmelden extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return
+      Scaffold(appBar: AppBar(
+        title: Text("Anmelden"),
+      ),
+          body: Center(
+            child: Container(
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("noch in Bearbeitung"),
+              ),
+            ),
+          ),
+          );
+
+
+  }
+}
 
 
 
