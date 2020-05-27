@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Chatview.dart';
+import 'Einstellung.dart';
+
 
 
 
@@ -43,17 +45,17 @@ class _HomeState extends State<Home>{
   ],),
   ),
     Center(child: ChatDetails(),),
-    Center (child: Text("noch in Bearbeitung"),),
+    Center (child: MyApp()),
     Center(child: ListView(
       children: <Widget>[
         Container(
           margin: const EdgeInsets.only(top: 30.0),
           alignment: Alignment.center,
           child: Text('Impressum\n',style: TextStyle(
-  color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),),),
+              color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),),),
         Container(
           margin: const EdgeInsets.only(top:20,left: 50),
-          child: Text("Chatbot-app\nV.1.1.0\nEntwecklet von:\nBensouda Hanae\nAzlouk Mohamed Yassine\nRebaa Hasse\nMorchid Abdelhamid",
+          child: Text("Chatbot-app\nV.1.1.0\nEntwecklet von:\nBensouda Hanae\nAzlouk Mohamed Yassine\nRebaa Hassen\nMorchid Abdelhamid",
             style: TextStyle(color: Colors.black54, fontSize: 15),
           ),
         ),
