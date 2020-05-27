@@ -8,6 +8,8 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _ChatDetailsState extends State<ChatDetails> {
+  final messageInsert = TextEditingController();
+  List<Map> messsages = List();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +51,7 @@ class _ChatDetailsState extends State<ChatDetails> {
             child: Column(
               children: <Widget>[
                  ListView.builder(
-                    itemCount: 1,
+                    itemCount:  messsages.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
