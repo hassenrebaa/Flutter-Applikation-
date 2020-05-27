@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
       Container(
                   child:ListTile(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Useranmelden()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
                     },
                     leading: Icon(Icons.person_add , color:Colors.blue),
                     title: Text("Konto-hinzufügen")
@@ -98,28 +98,88 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Useranmelden extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   @override
+  _LoginPageState createState() => new _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _Benutzername , _password,_URL;
+
   Widget build(BuildContext context) {
     return
       Scaffold(appBar: AppBar(
         title: Text("Anmelden"),
       ),
-          body: Center(
-            child: Container(
-              child: RaisedButton(
-                onPressed: () {
-                  Navigator.pop(context);
+
+      body: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Container(
+
+          child:    TextFormField(
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Provide an Sever URL';
+                  }
                 },
-                child: Text("noch in Bearbeitung"),
+                decoration: InputDecoration(
+                  labelText: 'Server URL',
+
+                ),
+                onSaved: (input) => _URL= input,
               ),
-            ),
-          ),
-          );
+              ),
+              Container(
 
+                child:
+                TextFormField(
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Provide an Benutzername';
+                  }
+                },
+                decoration: InputDecoration(
+                  labelText: 'Benutzername',
 
+                ),
+                onSaved: (input) => _Benutzername = input,
+              ),
+              ),
+
+              Container(
+
+                child:
+                TextFormField(
+                validator: (input) {
+                  if (input.length < 6) {
+                    return 'Longer password please';
+                  }
+                },
+                decoration: InputDecoration(
+                    labelText: 'Password'
+                ),
+                onSaved: (input) => _password = input,
+                obscureText: true,
+              ),),
+              RaisedButton(
+                onPressed: () {},
+                child: Text('Anmelden'),
+              ),
+            ],
+          )
+      ),
+    );
   }
 }
+
+
+
+
 
 
 
