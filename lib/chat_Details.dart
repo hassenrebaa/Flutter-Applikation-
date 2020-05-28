@@ -6,6 +6,7 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _ChatDetailsState extends State<ChatDetails> {
+  final TextEditingController _textController = new TextEditingController() ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +152,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => void _handleSubmitted(_textController),
                     icon: Icon(
                       Icons.send,
                       color: Color(0xff3E8DF3),
@@ -164,6 +165,10 @@ class _ChatDetailsState extends State<ChatDetails> {
         ],
       ),
     );
+  }
+
+  void _handleSubmitted(TextEditingController textController) {
+    textController.clear();
   }
 }
 
