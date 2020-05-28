@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
                     },
                     leading: Icon(Icons.person_add , color:Colors.blue),
-                    title: Text("Konto-hinzufügen")
+                    title: Text("Konto-hinzufügen") // Hier Änderung Hassens 
                   ),
                   alignment: Alignment.bottomLeft,
 
