@@ -181,7 +181,7 @@ class ChatMessage extends StatelessWidget {
     ];
 
   }
-
+// Änderung 
   @override
   Widget build(BuildContext context) {
     return Container(
