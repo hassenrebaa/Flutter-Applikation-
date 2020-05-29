@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'Chatview.dart';
 import 'Einstellung.dart';
+import 'chat.dart';
 
 
 
