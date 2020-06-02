@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 decoration: InputDecoration(
-                  labelText: 'Server URL',
+                  labelText: '   Server URL',
 
                 ),
                 onSaved: (input) => _URL= input,
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 decoration: InputDecoration(
-                  labelText: 'Benutzername',
+                  labelText: '   Benutzername',
 
                 ),
                 onSaved: (input) => _Benutzername = input,
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 decoration: InputDecoration(
-                    labelText: 'Password'
+                    labelText: '   Password'
                 ),
                 onSaved: (input) => _password = input,
                 obscureText: true,
