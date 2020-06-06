@@ -1,57 +1,28 @@
-// To parse this JSON data, do
-//
-//     final botresp = botrespFromJson(jsonString);
-
+import 'dart:async';
 import 'dart:convert';
 
-Botresp botrespFromJson(String str) => Botresp.fromJson(json.decode(str));
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-String botrespToJson(Botresp data) => json.encode(data.toJson());
+class Album {
+  String historyID;
+  String Username;
+  String  text;
 
-class Botresp {
-  Botresp({
-    this.requestText,
-    this.text,
-    this.accessToken,
-    this.action,
-    this.encouragerTime,
-    this.activeBot,
-    this.botName,
-    this.messageKey,
-    this.error,
-  });
-
-  dynamic requestText;
-  String text;
-  dynamic accessToken;
-  dynamic action;
-  dynamic encouragerTime;
-  dynamic activeBot;
-  dynamic botName;
-  dynamic messageKey;
-  bool error;
-
-  factory Botresp.fromJson(Map<String, dynamic> json) => Botresp(
-    requestText: json["requestText"],
-    text: json["text"],
-    accessToken: json["accessToken"],
-    action: json["action"],
-    encouragerTime: json["encouragerTime"],
-    activeBot: json["activeBot"],
-    botName: json["botName"],
-    messageKey: json["messageKey"],
-    error: json["error"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "requestText": requestText,
-    "text": text,
-    "accessToken": accessToken,
-    "action": action,
-    "encouragerTime": encouragerTime,
-    "activeBot": activeBot,
-    "botName": botName,
-    "messageKey": messageKey,
-    "error": error,
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'historyID': historyID,
+    'Username': Username,
+    'text': text,
   };
+
+  Album({this.historyID,this.Username,this.text});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      historyID: json['historyID'],
+      Username: json['Username'],
+      text: json['text'],
+
+    );
+  }
 }
