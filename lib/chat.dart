@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+
+import 'chatrep.dart';
 
 
 class ChatDetails extends StatefulWidget {
@@ -15,8 +20,28 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _HomePageDialogflowV2 extends State<ChatDetails> {
+
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
+  Botresp _chat;
+  String url = 'https://runtime-demo.eu-de.mybluemix.net/api/chat';
+
+  Future<Botresp> tuarequest(String requestText) async{
+
+    final http.Response response = await http.post(url,headers: <String,String>{"Accept": "application/json",
+  //'historyID': historyID,
+  //'username': username
+}, body:{
+    'requestText': requestText,
+    });
+  if (response.statusCode== 201) {
+  return Botresp.fromJson(json.decode(response.body));
+  } else {
+  throw Exception('Failed to create album.');
+  }
+}
+
+
 
   Widget _buildTextComposer() {
     return IconTheme(
@@ -38,7 +63,16 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () => _handleSubmitted(_textController.text),
+
+                onPressed: () async
+                {
+                  final String requestText = _textController.text;
+
+                  final Botresp rep = await tuarequest(requestText);
+                  setState(() {
+                _chat = rep;
+                  });
+                },
               ),
             ),
           ],
@@ -46,7 +80,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       ),
     );
   }
-  void response(query) async {
+  void response1(query) async {
     _textController.clear();
 
     ChatMessage message = ChatMessage(
@@ -70,7 +104,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     setState(() {
       _messages.insert(0, message,);
     });
-    response("  ");
+    tuarequest;
   }
 
 
@@ -110,7 +144,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               itemBuilder: (_, int index) => _messages[index],
               itemCount: _messages.length,
             )),
-        Divider(height: 1.0),
+        Divider(height: 2.0),
 
         Container(
           decoration: BoxDecoration(color: Theme.of(context).cardColor),
@@ -193,3 +227,17 @@ class ChatMessage extends StatelessWidget {
     );
   }
 }
+class Album {
+  final String historyID;
+  final String username;
+
+  Album({this.historyID, this.username});
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      historyID: json['historyID'],
+      username: json['username'],
+    );
+  }
+  }
+
+
