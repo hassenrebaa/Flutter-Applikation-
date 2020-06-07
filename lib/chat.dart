@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'chatrep.dart';
 
 class ChatDetails extends StatefulWidget {
@@ -22,10 +21,10 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
 
-  Future<Album> _futureAlbum ;
+  Album  _futureAlbum ;
   Future<Album> createAlbum(String text) async {
 
-    final http.Response response = await http.post(
+    final http.Response response1 = await http.post(
       'https://runtime-demo.eu-de.mybluemix.net/api/chat',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -37,8 +36,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
       }),
     );
-    final jsonresponse = json.decode(response.body);
-    if (response.statusCode == 200) {
+    final jsonresponse = json.decode(response1.body);
+    if (response1.statusCode == 200) {
+      print(jsonresponse[0]);
       return Album.fromJson(jsonresponse[0]);
     } else {
       throw Exception('Failed to create...');
@@ -66,10 +66,13 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () {
+                onPressed:  () async{
+
+                  final Album alb = await createAlbum(_textController.text);
                   setState(() {
-                    _futureAlbum = createAlbum(_textController.text);
+                    _futureAlbum= alb;
                   });
+                  _handleSubmitted(_textController.text);
                 },
               ),
             ),
@@ -79,10 +82,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
   }
   void response(query) async {
-    _textController.clear();
 
     ChatMessage message = ChatMessage(
-      text: "",
+      text: "${_futureAlbum.text}",
 
       type: false,
     );
@@ -102,7 +104,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     setState(() {
       _messages.insert(0, message,);
     });
-    response("  ");
+    response(text);
   }
 
 
@@ -124,18 +126,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                 ),
                 Expanded(
                   child:  Container(
-                    child:
-                    FutureBuilder<Album>(
-                      future: _futureAlbum,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data.text);
-                        } else if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        return CircularProgressIndicator();
-                      },
-                    ),
+                    child: Text("iii"),
                   ),
                 ),
               ],
@@ -169,7 +160,7 @@ class ChatMessage extends StatelessWidget {
   final String text;
 
   final bool type;
-  final pop = _HomePageDialogflowV2();
+
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -186,19 +177,9 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
 
             Container(
-              child:
-              FutureBuilder<Album>(
-                future: pop._futureAlbum,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data.text);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return CircularProgressIndicator();
-                },
-              ),
+              child: Text(text),
             ),
+
           ],
         ),
       ),
@@ -213,7 +194,7 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              child: Text(this.text),
             ),
           ],
         ),
