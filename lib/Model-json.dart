@@ -1,5 +1,5 @@
 
-class Album {
+class Botresp {
   String historyID;
   String Username;
   String  text;
@@ -12,10 +12,10 @@ class Album {
     'requestText':requestText,
   };
 
-  Album({this.historyID,this.Username,this.text,this.requestText});
+  Botresp({this.historyID,this.Username,this.text,this.requestText});
 
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
+  factory Botresp.fromJson(Map<String, dynamic> json) {
+    return Botresp(
       historyID: json['historyID'],
       Username: json['Username'],
       text: json['text'],

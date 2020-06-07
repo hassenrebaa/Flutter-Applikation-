@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
+import 'Model-json.dart';
 import 'chatrep.dart';
 
 
@@ -227,17 +228,6 @@ class ChatMessage extends StatelessWidget {
     );
   }
 }
-class Album {
-  final String historyID;
-  final String username;
 
-  Album({this.historyID, this.username});
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      historyID: json['historyID'],
-      username: json['username'],
-    );
-  }
-  }
 
 
