@@ -1,11 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
-import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'Model-json.dart';
 import 'chatrep.dart';
+
 
 class ChatDetails extends StatefulWidget {
   ChatDetails({
@@ -20,31 +20,27 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _HomePageDialogflowV2 extends State<ChatDetails> {
+
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
+  Botresp _chat;
+  String url = 'https://runtime-demo.eu-de.mybluemix.net/api/chat';
 
-  Album  _futureAlbum ;
-  Future<Album> createAlbum(String text) async {
+  Future<Botresp> tuarequest(String requestText) async{
 
-    final http.Response response1 = await http.post(
-      'https://runtime-demo.eu-de.mybluemix.net/api/chat',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'historyID' : 'dsdsadsadasdasddsds',
-        'username':  'test',
-      },
-      body: jsonEncode(<String, String>{
-        "text": text ,
-
-      }),
-    );
-    final jsonresponse = json.decode(response1.body);
-    if (response1.statusCode == 200) {
-      return Album.fromJson(jsonresponse[0]);
-    } else {
-      throw Exception('Failed to create...');
-    }
+    final http.Response response = await http.post(url,headers: <String,String>{"Accept": "application/json",
+  //'historyID': historyID,
+  //'username': username
+}, body:{
+    'requestText': requestText,
+    });
+  if (response.statusCode== 201) {
+  return Botresp.fromJson(json.decode(response.body));
+  } else {
+  throw Exception('Failed to create album.');
   }
+}
+
 
 
   Widget _buildTextComposer() {
@@ -58,7 +54,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
             Flexible(
               child: TextField(
                 controller: _textController,
-               // onSubmitted: _handleSubmitted,
+                onSubmitted: _handleSubmitted,
                 decoration:
                 InputDecoration.collapsed(hintText: "Schreiben Sie hier eine Nachricht"),
               ),
@@ -67,11 +63,14 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed:  () async{
-                  _handleSubmitted(_textController.text);
-                  final Album alb = await createAlbum(_textController.text);
+
+                onPressed: () async
+                {
+                  final String requestText = _textController.text;
+
+                  final Botresp rep = await tuarequest(requestText);
                   setState(() {
-                    _futureAlbum= alb;
+                _chat = rep;
                   });
                 },
               ),
@@ -81,10 +80,11 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       ),
     );
   }
-  void response(query) async {
+  void response1(query) async {
     _textController.clear();
+
     ChatMessage message = ChatMessage(
-      text: "${_futureAlbum.text}",
+      text: "",
 
       type: false,
     );
@@ -104,7 +104,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     setState(() {
       _messages.insert(0, message,);
     });
-    response(text);
+    tuarequest;
   }
 
 
@@ -125,29 +125,119 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                   ),
                 ),
                 Expanded(
-                  child:  Container(
-                    child: Text("iii"),
+                  child: Container(
+                    child: Text(
+                      "Herzlich willkommen bei unserer Energie-App!\nIch bin"
+                          "ein Chatbot Meine Name ist Roby und bin da zu helfen",
+                      style: TextStyle(color: Colors.black),),
+
                   ),
                 ),
               ],
             ),
 
-            Flexible(
-                child:
-                ListView.builder(
-                  padding: EdgeInsets.all(8.0),
-                  reverse: true,
-                  itemBuilder: (_, int index) => _messages[index],
-                  itemCount: _messages.length,
-                )),
-            Divider(height: 1.0),
+        Flexible(
+            child:
+            ListView.builder(
+              padding: EdgeInsets.all(8.0),
+              reverse: true,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+            )),
+        Divider(height: 2.0),
 
-            Container(
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-              child: _buildTextComposer(),
-            ),
-          ]),
+        Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          child: _buildTextComposer(),
+        ),
+      ]),
     );
   }
 }
+
+class ChatMessage extends StatelessWidget {
+  ChatMessage({
+    this.text,
+    this.type,
+  });
+
+  final String text;
+
+  final bool type;
+
+  List<Widget> otherMessage(context) {
+    return <Widget>[
+      Container(
+        margin: const EdgeInsets.only(right: 16.0),
+        child: CircleAvatar(
+          backgroundImage: AssetImage('Images/bot.png'),
+          backgroundColor: Colors.teal,
+          radius: 15,
+        ),
+      ),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+
+            Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: Text("Herzlich willkommen bei unserer Energie-App!\nIch bin "
+                  "ein Chatbot Meine Name ist Roby und bin da zu helfen"),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> myMessage(context) {
+    return <Widget>[
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: Text(text),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(left: 16.0),
+        child: CircleAvatar(
+          backgroundImage: AssetImage('Images/user.png'),
+          backgroundColor: Colors.white,
+          minRadius: 15,
+        ),
+      ),
+    ];
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: this.type ? myMessage(context) : otherMessage(context),
+      ),
+    );
+  }
+}
+class Album {
+  final String historyID;
+  final String username;
+
+  Album({this.historyID, this.username});
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      historyID: json['historyID'],
+      username: json['username'],
+    );
+  }
+  }
+
 
