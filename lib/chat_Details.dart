@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ChatDetails extends StatefulWidget {
+class ChatDetails2 extends StatefulWidget {
   @override
   _ChatDetailsState createState() => _ChatDetailsState();
 }

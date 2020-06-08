@@ -1,11 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'chatrep.dart';
 
+import 'chatrep.dart';
 
 class ChatDetails extends StatefulWidget {
   ChatDetails({
@@ -20,27 +20,31 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _HomePageDialogflowV2 extends State<ChatDetails> {
-
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
-  Botresp _chat;
-  String url = 'https://runtime-demo.eu-de.mybluemix.net/api/chat';
 
-  Future<Botresp> tuarequest(String requestText) async{
+  Album  _futureAlbum ;
+  Future<Album> createAlbum(String text) async {
 
-    final http.Response response = await http.post(url,headers: <String,String>{"Accept": "application/json",
-  //'historyID': historyID,
-  //'username': username
-}, body:{
-    'requestText': requestText,
-    });
-  if (response.statusCode== 201) {
-  return Botresp.fromJson(json.decode(response.body));
-  } else {
-  throw Exception('Failed to create album.');
+    final http.Response response1 = await http.post(
+      'https://runtime-demo.eu-de.mybluemix.net/api/chat',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'historyID' : 'dsdsadsadasdasddsds',
+        'username':  'test',
+      },
+      body: jsonEncode(<String, String>{
+        "text": '${text}' ,
+
+      }),
+    );
+    final jsonresponse = json.decode(response1.body);
+    if (response1.statusCode == 200) {
+      return Album.fromJson(jsonresponse[0]);
+    } else {
+      throw Exception('Failed to create...');
+    }
   }
-}
-
 
 
   Widget _buildTextComposer() {
@@ -63,14 +67,11 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-
-                onPressed: () async
-                {
-                  final String requestText = _textController.text;
-
-                  final Botresp rep = await tuarequest(requestText);
+                onPressed:  () async{
+                 // _handleSubmitted(_textController.text);
+                  final Album alb = await createAlbum(_textController.text);
                   setState(() {
-                _chat = rep;
+                    _futureAlbum= alb;
                   });
                 },
               ),
@@ -80,11 +81,10 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       ),
     );
   }
-  void response1(query) async {
+  void response(query) async {
     _textController.clear();
-
     ChatMessage message = ChatMessage(
-      text: "",
+      text: "${_futureAlbum.text}",
 
       type: false,
     );
@@ -104,7 +104,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     setState(() {
       _messages.insert(0, message,);
     });
-    tuarequest;
+    response(text);
   }
 
 
@@ -125,32 +125,28 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Text(
-                      "Herzlich willkommen bei unserer Energie-App!\nIch bin"
-                          "ein Chatbot Meine Name ist Roby und bin da zu helfen",
-                      style: TextStyle(color: Colors.black),),
-
+                  child:  Container(
+                    child: Text("iii"),
                   ),
                 ),
               ],
             ),
 
-        Flexible(
-            child:
-            ListView.builder(
-              padding: EdgeInsets.all(8.0),
-              reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
-            )),
-        Divider(height: 2.0),
+            Flexible(
+                child:
+                ListView.builder(
+                  padding: EdgeInsets.all(8.0),
+                  reverse: true,
+                  itemBuilder: (_, int index) => _messages[index],
+                  itemCount: _messages.length,
+                )),
+            Divider(height: 1.0),
 
-        Container(
-          decoration: BoxDecoration(color: Theme.of(context).cardColor),
-          child: _buildTextComposer(),
-        ),
-      ]),
+            Container(
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
+            ),
+          ]),
     );
   }
 }
@@ -181,10 +177,9 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
 
             Container(
-              margin: const EdgeInsets.only(top: 5.0),
-              child: Text("Herzlich willkommen bei unserer Energie-App!\nIch bin "
-                  "ein Chatbot Meine Name ist Roby und bin da zu helfen"),
+              child: Text(text),
             ),
+
           ],
         ),
       ),
@@ -199,7 +194,7 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              child: Text(this.text),
             ),
           ],
         ),
@@ -227,17 +222,3 @@ class ChatMessage extends StatelessWidget {
     );
   }
 }
-class Album {
-  final String historyID;
-  final String username;
-
-  Album({this.historyID, this.username});
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      historyID: json['historyID'],
-      username: json['username'],
-    );
-  }
-  }
-
-
