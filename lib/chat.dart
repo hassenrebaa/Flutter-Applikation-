@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-
 import 'chatrep.dart';
 
 class ChatDetails extends StatefulWidget {
@@ -40,6 +38,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
     final jsonresponse = json.decode(response1.body);
     if (response1.statusCode == 200) {
+      print(jsonresponse[0]);
       return Album.fromJson(jsonresponse[0]);
     } else {
       throw Exception('Failed to create...');
@@ -68,11 +67,12 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed:  () async{
-                 // _handleSubmitted(_textController.text);
+
                   final Album alb = await createAlbum(_textController.text);
                   setState(() {
                     _futureAlbum= alb;
                   });
+                  _handleSubmitted(_textController.text);
                 },
               ),
             ),
@@ -82,7 +82,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
   }
   void response(query) async {
-    _textController.clear();
+
     ChatMessage message = ChatMessage(
       text: "${_futureAlbum.text}",
 

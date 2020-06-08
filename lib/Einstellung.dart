@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 
 
@@ -66,7 +67,6 @@ class MyApp extends StatelessWidget {
                         activeTrackColor: Colors.lightGreenAccent,
                         activeColor: Colors.green,
                       ),
-
                   ),
                     ],
                   ),
@@ -104,8 +104,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _Benutzername , _password,_URL;
+
+  String url = 'https://runtime-demo.eu-de.mybluemix.net/api/chat';
+
+  // ignore: missing_return
+  Future<String> makeRequest() async{
+    var response =
+    await http.post(Uri.encodeFull(url),
+        headers: {"Accept": "application/json"});
+    print(response.body);
+
+  }
 
   Widget build(BuildContext context) {
     return
@@ -166,8 +178,8 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),),
               RaisedButton(
-                onPressed: () {},
-                child: Text('Anmelden'),
+                onPressed: makeRequest,
+              child: Text('Anmelden'),
               ),
             ],
           )
@@ -175,11 +187,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-
-
-
-
 
 
 
