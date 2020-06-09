@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutterapp/uierstellen/Attachement.dart';
+
 
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'chatrep.dart';
+
 
 class ChatDetails extends StatefulWidget {
   ChatDetails({
@@ -19,10 +25,12 @@ class ChatDetails extends StatefulWidget {
 
 class _HomePageDialogflowV2 extends State<ChatDetails> {
   final List<ChatMessage> _messages = <ChatMessage>[];
+  final List<Attachment> _attachement = <Attachment>[];
   final TextEditingController _textController = TextEditingController();
+  
+  Welcome bot;
 
-  Album  _futureAlbum ;
-  Future<Album> createAlbum(String text) async {
+  Future<Welcome> createAlbum(String text) async {
 
     final http.Response response1 = await http.post(
       'https://runtime-demo.eu-de.mybluemix.net/api/chat',
@@ -31,15 +39,23 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
         'historyID' : 'dsdsadsadasdasddsds',
         'username':  'test',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode({
         "text": '${text}' ,
-
       }),
     );
+
     final jsonresponse = json.decode(response1.body);
+
     if (response1.statusCode == 200) {
       print(jsonresponse[0]);
-      return Album.fromJson(jsonresponse[0]);
+
+
+      for (int i = 0; i < _attachement.length; i++) {
+
+          print('url : ${_attachement[i]}');
+
+      }
+      return Welcome.fromJson(jsonresponse);
     } else {
       throw Exception('Failed to create...');
     }
@@ -68,9 +84,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                 icon: Icon(Icons.send),
                 onPressed:  () async{
 
-                  final Album alb = await createAlbum(_textController.text);
+                  final Welcome alb = await createAlbum(_textController.text);
                   setState(() {
-                    _futureAlbum= alb;
+                    bot= alb;
                   });
                   _handleSubmitted(_textController.text);
                 },
@@ -82,10 +98,8 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
   }
   void response(query) async {
-
     ChatMessage message = ChatMessage(
-      text: "${_futureAlbum.text}",
-
+      text: "${bot.text}",
       type: false,
     );
     setState(() {
@@ -154,12 +168,16 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 class ChatMessage extends StatelessWidget {
   ChatMessage({
     this.text,
+    this.link,
     this.type,
   });
 
   final String text;
-
+  final String link;
   final bool type;
+
+
+ var  pop = _HomePageDialogflowV2();
 
   List<Widget> otherMessage(context) {
     return <Widget>[
@@ -176,9 +194,16 @@ class ChatMessage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
 
+            pop.bot == null ? Container() :
+
+            Text("${pop.bot.text}"),
+
             Container(
-              child: Text(text),
-            ),
+              child:  Text(text),
+
+            )
+
+
 
           ],
         ),
