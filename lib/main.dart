@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Einstellung.dart';
+import 'Layout.dart';
 import 'chat.dart';
 
 
@@ -44,7 +45,7 @@ class _HomeState extends State<Home>{
         ],),
     ),
     Center (child: ChatDetails(),),
-    Center (child: MyApp()),
+    Center (child: CustomCheckbox()),
     Center (child: ListView(
       children: <Widget>[
         Container(

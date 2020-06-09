@@ -1,101 +1,122 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-
 class CustomCheckbox extends StatefulWidget {
+  CustomCheckbox({Key key, this.title}) : super(key: key);
+  final String title;
   @override
   CheckboxWidget createState() => new CheckboxWidget();
 }
 
-class CheckboxWidget extends State {
-
-  bool isChecked = true;
-
-  var checkedResult = 'Checkbox is CHECKED';
-
-
-
-  bool satVal = false;
-
-  Widget checkbox(String title, bool boolValue) {
-    return Column(
-
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(title),
-        Checkbox(
-          value: boolValue,
-          onChanged: (value){toggleCheckbox(value);},
-        )
-      ],
-    );
-  }
+class CheckboxWidget extends State<CustomCheckbox> {
+  String t="Ich akzeptiere die oben genannten \n Datenschutzhinweise";
+  bool checkBoxState=false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  new Scaffold(
 
-        body: Center(
-
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              InkWell(
-                // margin: const EdgeInsets.only(left: 20.0, right: 20),
-                //alignment: new FractionalOffset(1.0, 0.0),
-                child: Text(
-                  "Die Betreiber dieser App nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung."
-                      "Wenn Sie diese App benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, "
-                      "welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht."
-                      "Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich."
-                  , style: TextStyle(color: Colors.black45,
-                    fontSize: 15),),
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  checkbox("Ich akzeptiere die oben genannten Datenschutzhinweise", satVal),
-
-
-                ],
-              ),
-              InkWell(
-                // margin: const EdgeInsets.only(top: 20,left: 50,right: 50) ,
-                child: CupertinoButton(
-                  child: Text("Dantenschutzabstimung"),
-                  onPressed: (){
-                    print("ok");
-                  },
-                  color: Colors.green,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-              ),
-            ],
+      bottomNavigationBar: new ButtonBar (
+        children:[
+          InkWell(
+// margin: const EdgeInsets.only(left: 20.0, right: 20),
+//alignment: new FractionalOffset(1.0, 0.0),
+            child: Text(
+              "Die Betreiber dieser App nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung."
+                  "Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich."
+              , style: TextStyle(color: Colors.black45,
+                fontSize: 15),),
           ),
-        )
+          new Container(
+              child: Row(
+                children: <Widget>[
+
+                  new Checkbox(
+                      onChanged: (bool e) => something() ,
+                      value: checkBoxState),
+                  new Text(t),
+
+                ], )
+          ),
+
+          new Container(
+            margin: const EdgeInsets.only(top: 10,left: 40,right: 30) ,
+            child: CupertinoButton(
+              child: Text("Dantenschutzabstimung"),
+              onPressed: (){
+                if(checkBoxState==true)
+                  showAlertDialog2(context) ;
+                else
+                  showAlertDialog(context) ;
+              },
+              color: Colors.green,
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+
+          ),],
+      ),
     );
   }
-  void toggleCheckbox(bool value) {
-    bool isChecked = true;
 
-    var checkedResult = 'Checkbox is CHECKED';
+  void  something () {
+    setState((){
+      if(checkBoxState) {
+        t= "Ich akzeptiere die oben genannten \n Datenschutzhinweise";
+        checkBoxState= ! checkBoxState;
 
-    if(isChecked == false)
-    {
-      // Put your code here which you want to execute on CheckBox Checked event.
-      setState(() {
-        isChecked = true;
-        checkedResult = 'Checkbox is CHECKED';
-      });
-
+      }
+      else{
+        t= "Ich akzeptiere die oben genannten \n Datenschutzhinweise";
+        checkBoxState = !checkBoxState;
+      }
     }
-    else
-    {
-      // Put your code here which you want to execute on CheckBox Un-Checked event.
-      setState(() {
-        isChecked = false;
-        checkedResult = 'Checkbox is UN-CHECKED';
-      });
-    }
-  }}
+    );
+  }
+
+  void showAlertDialog(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () { },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Achtung"),
+      content: Text("Stimmen Sie bitte die Datenschützung zu !"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void showAlertDialog2(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () { },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Hinweis"),
+      content: Text("Dankeschön Viel Spaß mit Ihre App"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+}
