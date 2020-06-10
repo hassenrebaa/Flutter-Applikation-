@@ -1,14 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutterapp/uierstellen/Attachement.dart';
-
+import 'package:flutterapp/Attachment.dart';
 
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_linkify/flutter_linkify.dart';
 
-import 'chatrep.dart';
 
 
 class ChatDetails extends StatefulWidget {
@@ -19,18 +16,18 @@ class ChatDetails extends StatefulWidget {
 
   final String title;
 
+
   @override
   _HomePageDialogflowV2 createState() => _HomePageDialogflowV2();
 }
 
 class _HomePageDialogflowV2 extends State<ChatDetails> {
+  final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
-  final List<Attachment> _attachement = <Attachment>[];
   final TextEditingController _textController = TextEditingController();
-  
-  Welcome bot;
 
-  Future<Welcome> createAlbum(String text) async {
+  Attachment1 bot;
+  Future<Attachment1> createAlbum(String text) async {
 
     final http.Response response1 = await http.post(
       'https://runtime-demo.eu-de.mybluemix.net/api/chat',
@@ -41,21 +38,20 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       },
       body: jsonEncode({
         "text": '${text}' ,
+
+
+
       }),
     );
-
     final jsonresponse = json.decode(response1.body);
-
+    final test =Attachment1.fromJson(jsonresponse[0]);
+    att.add(test);
     if (response1.statusCode == 200) {
+
+
       print(jsonresponse[0]);
 
-
-      for (int i = 0; i < _attachement.length; i++) {
-
-          print('url : ${_attachement[i]}');
-
-      }
-      return Welcome.fromJson(jsonresponse);
+      return test;
     } else {
       throw Exception('Failed to create...');
     }
@@ -83,8 +79,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed:  () async{
-
-                  final Welcome alb = await createAlbum(_textController.text);
+                  final Attachment1 alb = await createAlbum(_textController.text);
                   setState(() {
                     bot= alb;
                   });
@@ -98,12 +93,15 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
   }
   void response(query) async {
+
     ChatMessage message = ChatMessage(
       text: "${bot.text}",
       type: false,
     );
+
     setState(() {
       _messages.insert(0, message);
+
     });
   }
 
@@ -150,7 +148,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                 child:
                 ListView.builder(
                   padding: EdgeInsets.all(8.0),
-                  reverse: true,
+                  reverse: false,
                   itemBuilder: (_, int index) => _messages[index],
                   itemCount: _messages.length,
                 )),
@@ -168,48 +166,13 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 class ChatMessage extends StatelessWidget {
   ChatMessage({
     this.text,
-    this.link,
     this.type,
   });
 
   final String text;
-  final String link;
   final bool type;
+ final pop = _HomePageDialogflowV2();
 
-
- var  pop = _HomePageDialogflowV2();
-
-  List<Widget> otherMessage(context) {
-    return <Widget>[
-      Container(
-        margin: const EdgeInsets.only(right: 16.0),
-        child: CircleAvatar(
-          backgroundImage: AssetImage('Images/bot.png'),
-          backgroundColor: Colors.teal,
-          radius: 15,
-        ),
-      ),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-
-            pop.bot == null ? Container() :
-
-            Text("${pop.bot.text}"),
-
-            Container(
-              child:  Text(text),
-
-            )
-
-
-
-          ],
-        ),
-      ),
-    ];
-  }
 
   List<Widget> myMessage(context) {
     return <Widget>[
@@ -219,7 +182,7 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(this.text),
+              child: Text(text),
             ),
           ],
         ),
@@ -235,7 +198,39 @@ class ChatMessage extends StatelessWidget {
     ];
 
   }
+  List<Widget> otherMessage(context) {
+    return <Widget>[
+      Container(
+        margin: const EdgeInsets.only(right: 16.0),
+        child: CircleAvatar(
+          backgroundImage: AssetImage('Images/bot.png'),
+          backgroundColor: Colors.teal,
+          radius: 15,
+        ),
+      ),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
 
+            Container(
+              child:  Text(text),
+
+            ),
+
+            Container(
+
+              child :Linkify(
+                onOpen: (link) => print("Clicked ${link}!"),
+                text: "adesso.de",
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
