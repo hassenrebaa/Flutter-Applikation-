@@ -147,7 +147,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                 child:
                 ListView.builder(
                   padding: EdgeInsets.all(8.0),
-                  reverse: false,
+                  reverse: true,
                   itemBuilder: (_, int index) => _messages[index],
                   itemCount: _messages.length,
                 )),
@@ -171,32 +171,6 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool type;
  final pop = _HomePageDialogflowV2();
-
-
-  List<Widget> myMessage(context) {
-    return <Widget>[
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
-            ),
-          ],
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.only(left: 16.0),
-        child: CircleAvatar(
-          backgroundImage: AssetImage('Images/user.png'),
-          backgroundColor: Colors.white,
-          minRadius: 15,
-        ),
-      ),
-    ];
-
-  }
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -230,6 +204,32 @@ class ChatMessage extends StatelessWidget {
     ];
 
   }
+
+  List<Widget> myMessage(context) {
+    return <Widget>[
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: Text(text),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(left: 16.0),
+        child: CircleAvatar(
+          backgroundImage: AssetImage('Images/user.png'),
+          backgroundColor: Colors.white,
+          minRadius: 15,
+        ),
+      ),
+    ];
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
