@@ -1,16 +1,15 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-
-class Info extends StatefulWidget {
+class CustomCheckbox1 extends StatefulWidget {
   CustomCheckbox({Key key, this.title}) : super(key: key);
   final String title;
   @override
   CheckboxWidget createState() => new CheckboxWidget();
 }
 
-class CheckboxWidget extends State<CustomCheckbox> {
+class CheckboxWidget1 extends State<CustomCheckbox> {
   String t="Ich akzeptiere die oben genannten \n Datenschutzhinweise";
   bool checkBoxState=false;
   @override
@@ -19,15 +18,10 @@ class CheckboxWidget extends State<CustomCheckbox> {
 
       bottomNavigationBar: new ButtonBar (
         children:[
-          InkWell(
-// margin: const EdgeInsets.only(left: 20.0, right: 20),
-//alignment: new FractionalOffset(1.0, 0.0),
-            child: Text(
-              "Die Betreiber dieser App nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung."
-                  "Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich."
-              , style: TextStyle(color: Colors.black45,
-                fontSize: 15),),
-          ),
+         Text(
+           "Impressum\n Chatbot-app\n V.1.1.0\n Entwecklet von:\nBensouda Hanae\nAzlouk Mohamed Yassine\nRebaa Hassen\nMorchid Abdelhamid\n\n\n"
+               "Die Betreiber dieser App nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung."
+         ),
           new Container(
               child: Row(
                 children: <Widget>[
@@ -122,3 +116,5 @@ class CheckboxWidget extends State<CustomCheckbox> {
     );
   }
 }
+
+ */
