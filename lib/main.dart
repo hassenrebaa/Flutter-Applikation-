@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/test-save.dart';
 import 'Einstellung.dart';
+import 'Layout.dart';
 import 'Model-json.dart';
 import 'chat.dart';
 
@@ -41,14 +43,16 @@ class _HomeState extends State<Home>{
         backgroundImage: AssetImage('Images/bot.png'), // Hier Changes 
       ),
     ),
-   Text("    Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
+   Text("Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
   ],),
   ),
     Center(child: ChatDetails(),),
-    Center (child: MyApp()),
-    Center(child:info() ),
+    Center(child: MyApp()),
+    Center(child: CustomCheckbox(),),
 
   ];
+
+  static set ob(CustomCheckbox ob) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
