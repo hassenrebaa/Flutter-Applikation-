@@ -61,18 +61,18 @@ class CheckboxWidget extends State<CustomCheckbox> {
               child: Row(
                 children: <Widget>[
 
-                  new  Container(
-                    child:
-                    new  Checkbox(
-                      value: checkBoxState1,
-                      onChanged: (value){
-                        setState(() {
-                          test().toString()!="" ? checkBoxState=value : checkBoxState;
+               new  Container(
+                           child:
+                           new  Checkbox(
+              value: checkBoxState1,
+              onChanged: (value){
+                setState(() {
+                  test().toString()!="" ? checkBoxState=value : checkBoxState;
 
-                        });
-                      },
+                });
+              },
 
-                    ),),
+             ),),
                   Text(t) ,
 
 
@@ -95,14 +95,14 @@ class CheckboxWidget extends State<CustomCheckbox> {
                 }
                 else if(checkBoxState == true && (test()==true))
                 {
-                  showAlertDialog3(context);
-                  print("nein !!! ") ;
+                showAlertDialog3(context);
+                print("nein !!! ") ;
 
                 }
                 else if (checkBoxState == false && (test()==true))
-                {
-                  showAlertDialog3(context);
-                }
+                  {
+                    showAlertDialog3(context);
+                  }
                 else
                   showAlertDialog(context);
 
@@ -203,13 +203,13 @@ class CheckboxWidget extends State<CustomCheckbox> {
     );
   }
 
-  bool test() {
+ bool test() {
     if(readData().toString()!="")
-    {
+      {
 
-      showAlertDialog3(context);
-      return true ;
-    }
+          showAlertDialog3(context);
+         return true ;
+      }
     return false ;
   }
-}
+  }

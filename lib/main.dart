@@ -2,28 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/test-save.dart';
 import 'Einstellung.dart';
+import 'Layout.dart';
 import 'Model-json.dart';
 import 'chat.dart';
 
 
 
 
-void main() async {
-
-  var myStoredData = await readData();
-
-  if(myStoredData != null){
-    print(myStoredData);
-  }
-
-
-  runApp(
-      MaterialApp(
-          title : 'Energie App',
-          home: Home()));
-
-}
-
+void main()  => runApp(
+    MaterialApp(
+        title : 'Energie App',
+        home: Home()));
 
 /// This Widget is the main application widget.
 class Home extends StatefulWidget {
@@ -54,14 +43,16 @@ class _HomeState extends State<Home>{
         backgroundImage: AssetImage('Images/bot.png'), // Hier Changes 
       ),
     ),
-   Text("    Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
+   Text("Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
   ],),
   ),
     Center(child: ChatDetails(),),
-    Center (child: MyApp()),
-    Center(child:CustomCheckbox() ),
+    Center(child: MyApp()),
+    Center(child: CustomCheckbox(),),
 
   ];
+
+  static set ob(CustomCheckbox ob) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
