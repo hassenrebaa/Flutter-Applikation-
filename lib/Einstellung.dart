@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 
 
 class MyApp extends StatelessWidget {
-
   // This widget is the root of your application.
   @override
   bool isSwitched =false ;
