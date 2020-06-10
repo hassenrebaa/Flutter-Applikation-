@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 
@@ -19,7 +22,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _Benutzername , _password,_URL;
-
+  TextEditingController serverController = new TextEditingController();
+  TextEditingController benutzerController = new TextEditingController();
 
 
   @override
@@ -28,12 +32,9 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-      body: Form(
-          key: _formKey,
-          child: Column(
-
-
-
+      body: ListView( key: _formKey,
+          children: <Widget>[
+          Column(
 
             children: <Widget>[
               InkWell(
@@ -56,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                     return 'Provide an Sever URL';
                   }
                 },
+                controller: serverController,
                 decoration: InputDecoration(
                   labelText: 'Server URL',
 
@@ -74,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     return 'Provide an Benutzername';
                   }
                 },
+                controller: benutzerController,
                 decoration: InputDecoration(
                   labelText: 'Benutzername',
 
@@ -95,18 +98,116 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                 writeData(serverController.text);
+                 writeData1(benutzerController.text);
+
+                  print('saved !');
+                },
                 child: Text('Anmelden'),
               ),
+              Container(
+                padding: EdgeInsets.all(20.00),
+                  child: new FutureBuilder(
+                  future: readData(),
+                  builder: (BuildContext context , AsyncSnapshot<String> data){
+                    if(data.hasData != null){
+                      return new Text(
+                        '${data.data.toString()}',
+                        style: new TextStyle(
+                          fontSize: 22.2,
+                          color: Colors.blue,
+                        ),);
+                    }else{
+                      return new Text(
+                        'No data saved !',
+                        style: new TextStyle(
+                          fontSize: 11.0,
+                          color: Colors.blue,
+                        ),);
+                    }
 
+                  }
+              )),
+              Container(
+                  padding: EdgeInsets.all(20.00),
+                  child: new FutureBuilder(
+                      future: readData1(),
+                      builder: (BuildContext context , AsyncSnapshot<String> data1){
+                        if(data1.hasData != null){
+                          return new Text(
+                            '${data1.data.toString()}',
+                            style: new TextStyle(
+                              fontSize: 22.2,
+                              color: Colors.blue,
+                            ),);
+                        }else{
+                          return new Text(
+                            'No data saved !',
+                            style: new TextStyle(
+                              fontSize: 11.0,
+                              color: Colors.blue,
+                            ),);
+                        }
 
+                      }
+                  )),
 
             ],
-          )
-      ),
-
-
-
+          ),
+          ],
+              )
     );
+  }
+  Future<String> get localPath async{
+    final path = await getApplicationDocumentsDirectory();
+    return path.path;
+  }
+  Future<String> get localPath1 async{
+    final path = await getApplicationDocumentsDirectory();
+    return path.path;
+  }
+
+  Future<File> get localFile  async{
+    final file = await localPath;
+    return new File('$file/data1.txt');
+  }
+
+  Future<File> get localFile1  async{
+    final file = await localPath1;
+    return new File('$file/data2.txt');
+  }
+
+
+  Future<File>   writeData(String value)  async{
+    final file = await localFile;
+    return file.writeAsString('${value}');
+  }
+  Future<File>   writeData1(String value)  async{
+    final file = await localFile1;
+    return file.writeAsString('${value}');
+  }
+
+
+  Future<String> readData() async{
+
+    try{
+      final file = await localFile;
+      String data = await file.readAsString();
+      return data;
+    }catch(e){
+      return 'error: empty file';
+    }
+}
+
+  Future<String> readData1() async{
+
+    try{
+      final file = await localFile1;
+      String data1 = await file.readAsString();
+      return data1;
+    }catch(e){
+      return 'error: empty file';
+    }
   }
 }

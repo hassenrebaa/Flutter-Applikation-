@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/test-save.dart';
 import 'Einstellung.dart';
 import 'Model-json.dart';
 import 'chat.dart';
@@ -7,10 +8,22 @@ import 'chat.dart';
 
 
 
-void main()  => runApp(
-    MaterialApp(
-        title : 'Energie App',
-        home: Home()));
+void main() async {
+
+  var myStoredData = await readData();
+
+  if(myStoredData != null){
+    print(myStoredData);
+  }
+
+
+  runApp(
+      MaterialApp(
+          title : 'Energie App',
+          home: Home()));
+
+}
+
 
 /// This Widget is the main application widget.
 class Home extends StatefulWidget {
