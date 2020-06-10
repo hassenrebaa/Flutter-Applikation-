@@ -46,7 +46,7 @@ class _HomeState extends State<Home>{
   ),
     Center(child: ChatDetails(),),
     Center (child: MyApp()),
-    Center(child:info() ),
+    Center(child:CustomCheckbox() ),
 
   ];
   @override
