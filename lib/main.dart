@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Einstellung.dart';
-import 'Model-json.dart';
+import 'Info.dart';
 import 'chat.dart';
 
 

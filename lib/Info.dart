@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomCheckbox extends StatefulWidget {
+
+
+class Info extends StatefulWidget {
   CustomCheckbox({Key key, this.title}) : super(key: key);
   final String title;
   @override
