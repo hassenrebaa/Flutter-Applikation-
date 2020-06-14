@@ -90,8 +90,11 @@ class _HomeState extends State<Home>{
           )
         ],
         onTap: (index){{
+
           setState(() {
               _currentIndex = index;
+
+
           });
           }
         },
