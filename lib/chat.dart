@@ -31,25 +31,22 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   var  pong = new _LoginPageState();
   final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
-  final List<Widget> _messages1 = [Text("hi")];
+
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot;
+  String server="";
+  String usr="";
 
 
-  @override
-  void initState() {
-    super.initState();
-    pong.texto();
-  }
 
   Future<Attachment1> createAlbum(String text) async {
 
     final http.Response response1 = await http.post(
-      'https://runtime-demo.eu-de.mybluemix.net/api/chat',
+      '$server',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'historyID' : 'dsdsadsadasdasddsds',
-        'username':  '${pong.getfutur1()}',
+        'username':  '$usr',
       },
       body: jsonEncode({
         "text": '${text}' ,
@@ -65,7 +62,8 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
 
       print(jsonresponse[0]);
-      print(pong.store());
+      print(server);
+      print(usr);
 
       return test;
     } else {
@@ -182,7 +180,25 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
     );
   }
-}
+texto1()async{
+
+  await pong.readData().then((String data) => server=data);
+
+  }
+  texto2()async{
+
+    await pong.readData1().then((String data) => usr=data);
+
+  }
+
+    @override
+  void initState() {
+    super.initState();
+    texto1();
+    texto2();
+  }
+
+  }
 
 class ChatMessage extends StatelessWidget {
   ChatMessage({
@@ -221,10 +237,6 @@ class ChatMessage extends StatelessWidget {
    ],
    );
  }
-
-
-
-
 
   List<Widget> otherMessage(context) {
     return <Widget>[
@@ -324,9 +336,10 @@ class _LoginPageState extends State<LoginPage> {
   String _Benutzername , _password,_URL;
   TextEditingController serverController = new TextEditingController();
   TextEditingController benutzerController = new TextEditingController();
-  var  str="";
+  var  urlserver="";
+  var  username="";
 
-  Widget getfutur() {
+ /* Widget getfutur() {
     return
       new FutureBuilder(
           future: readData(),
@@ -375,25 +388,31 @@ class _LoginPageState extends State<LoginPage> {
 
           }
       ) ;
-  }
+  }*/
 
    texto() async{
 
     readData().then((String data){
       setState(() {
-        str = data;
+        urlserver = data;
       });
-      return str;
+      return urlserver;
     });
-
-
 }
+  textou() async{
+
+    readData1().then((String data){
+      setState(() {
+        username = data;
+      });
+      return username;
+    });
+  }
+
   void initState() {
     super.initState();
    texto();
-  }
-  String store(){
-    return str;
+   textou();
   }
 
 
@@ -474,19 +493,22 @@ class _LoginPageState extends State<LoginPage> {
                     writeData1(benutzerController.text);
 
                     print('saved !');
-                    print(store());
+                    print(urlserver);
+                    print(username);
                   },
                   child: Text('Anmelden'),
                 ),
                 Container(
-                  padding: EdgeInsets.all(20.00),
-                  child: getfutur(),
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text("serverurl: $urlserver",style: TextStyle(
+    color: Colors.blueAccent, fontSize: 13, fontWeight: FontWeight.bold )),
                 ),
                 Container(
-                    padding: EdgeInsets.all(20.00),
-                    child: getfutur1()),
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text("username: $username",style: TextStyle(
+    color: Colors.blueAccent, fontSize: 15, fontWeight: FontWeight.bold)),
 
-              ],
+                ),],
             ),
           ],
         )
@@ -545,3 +567,4 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 }
+
