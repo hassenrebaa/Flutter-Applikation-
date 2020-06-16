@@ -140,46 +140,67 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   }
 
 
-  @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final double categoryHeight = size.height*0.08;
-
     return Scaffold(
+        body: Column(
+            children: [
+              Flexible(
+                flex: 2,
+                child:
+                ListView(
+                    children: <Widget>[
+                      Container(
+                        child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: const EdgeInsets.only(right: 16.0),
+                                child:
+                                CircleAvatar(
 
-      body: ListView(
-        physics: ScrollPhysics(),
-        shrinkWrap: true,
-              children: <Widget>[
+                                  backgroundImage: AssetImage('Images/bot.png'),
+                                  backgroundColor: Colors.teal,
+                                  radius: 15,
+                                ),
+                              ),
 
-                Flexible
-                  (
-              flex: 2,
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(8.0),
-                    reverse: true,
-                    shrinkWrap: true,
-                    itemBuilder: (_, int index) => _messages[index],
-                    itemCount: _messages.length,
-                  ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 16.0),
+                                    child:  Text("Hey, was kann ich für Sie tun?"),
+
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ),
+                      Expanded(child:
+                      ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(8.0),
+                        reverse: true,
+                        itemBuilder: (_, int index) => _messages[index],
+                        itemCount: _messages.length,
+                      ),
+                      )
+                    ]),
+              ),
+              Divider(height: 1.0),
+              Flexible(
+                flex: 0,
+                child:
+                Container(
+                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                  child: _buildTextComposer(),
                 ),
-
-
-
-
-            Divider(height: 1.0),
-        Flexible(
-          flex:0 ,
-    child:  Container(
-  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-  child: _buildTextComposer(),
-      )
-        )
-    ],
-    ),
-
+              ),
+            ])
     );
-  }
+
+
+}
 texto1()async{
 
   await pong.readData().then((String data) => server=data);
