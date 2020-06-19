@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-
 
 
 class LoginPage extends StatefulWidget {
@@ -15,9 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 
-
 class _LoginPageState extends State<LoginPage> {
-
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -195,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
       final file = await localFile;
       String data = await file.readAsString();
       return data;
+        ;
     }catch(e){
       return 'error: empty file';
     }

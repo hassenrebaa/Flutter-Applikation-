@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Attachment.dart';
+import 'package:flutterapp/infos.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_linkify/flutter_linkify.dart';
+import 'Attachment.dart';
+
 
 
 
@@ -21,12 +24,12 @@ class ChatDetails extends StatefulWidget {
 }
 
 class _HomePageDialogflowV2 extends State<ChatDetails> {
-  final List<Attachment1> att = new List();
+  final List<Attachment> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
 
-  Attachment1 bot;
-  Future<Attachment1> createAlbum(String text) async {
+  Attachment bot;
+  Future<Attachment> createAlbum(String text) async {
 
     final http.Response response1 = await http.post(
       'https://runtime-demo.eu-de.mybluemix.net/api/chat',
@@ -37,25 +40,24 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       },
       body: jsonEncode({
         "text": '${text}' ,
-
-
-
       }),
     );
     final jsonresponse = json.decode(response1.body);
-    final test =Attachment1.fromJson(jsonresponse[0]);
-    att.add(test);
+
+
+
     if (response1.statusCode == 200) {
+      print(jsonresponse[1]);
+      for(int i=0; i<att.length ; i++ ) {
+        print(i);
+        return Attachment.fromJson(jsonresponse[i]);
+      }
 
 
-      print(jsonresponse[0]);
-
-      return test;
     } else {
       throw Exception('Failed to create...');
     }
   }
-
 
   Widget _buildTextComposer() {
     return IconTheme(
@@ -78,7 +80,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed:  () async{
-                  final Attachment1 alb = await createAlbum(_textController.text);
+                  final Attachment alb = await createAlbum(_textController.text);
                   setState(() {
                     bot= alb;
                   });
@@ -94,7 +96,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   void response(query) async {
 
     ChatMessage message = ChatMessage(
-      text: "${bot.text}",
+      text: "${bot.link}",
       type: false,
     );
 
@@ -119,46 +121,67 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('Images/bot.png'),
-                    backgroundColor: Colors.grey[200],
-                    minRadius: 20,
-                  ),
-                ),
-                Expanded(
-                  child:  Container(
-                    child: Text("iii"),
-                  ),
-                ),
-              ],
-            ),
+        children: [
+          Flexible(
+      flex: 2,
+      child:
+        ListView(
+            children: <Widget>[
+              Container(
+                child: Row(
+                    children: <Widget>[
+                      Container(
+                     margin: const EdgeInsets.only(right: 16.0),
+                        child:
+                        CircleAvatar(
 
-            Flexible(
-                child:
-                ListView.builder(
+                          backgroundImage: AssetImage('Images/bot.png'),
+                          backgroundColor: Colors.teal,
+                          radius: 15,
+                        ),
+                      ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.only(right: 16.0),
+                            child:  Text("Hey, was kann ich für Sie tun?"),
+
+                          ),
+                        ],
+                      ),
+                    ]),
+              ),
+            Expanded(child:
+            ListView.builder(
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
                   padding: EdgeInsets.all(8.0),
                   reverse: true,
                   itemBuilder: (_, int index) => _messages[index],
                   itemCount: _messages.length,
-                )),
-            Divider(height: 1.0),
+                ),
+            )
+            ]),
+      ),
+        Divider(height: 1.0),
+          Flexible(
+       flex: 0,
+      child:
+        Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          child: _buildTextComposer(),
+        ),
+    ),
+    ])
+      );
 
-            Container(
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-              child: _buildTextComposer(),
-            ),
-          ]),
-    );
   }
 }
 
@@ -189,14 +212,6 @@ class ChatMessage extends StatelessWidget {
             Container(
               child:  Text(text),
 
-            ),
-
-            Container(
-
-              child :Linkify(
-                onOpen: (link) => print("Clicked ${link}!"),
-                text: "adesso.de",
-              ),
             ),
           ],
         ),
