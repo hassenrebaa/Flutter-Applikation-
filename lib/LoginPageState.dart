@@ -1,3 +1,4 @@
+/*
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,9 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
-
+test(){
+  return null;
+}
 
 class _LoginPageState extends State<LoginPage> {
 
@@ -20,8 +23,34 @@ class _LoginPageState extends State<LoginPage> {
   String _Benutzername , _password,_URL;
   TextEditingController serverController = new TextEditingController();
   TextEditingController benutzerController = new TextEditingController();
+  var zuz = null;
 
+  Widget getfutur() {
+  return
+    new FutureBuilder(
+      future: readData(),
+      builder: (BuildContext context , AsyncSnapshot<String> data){
+        if(data.hasData != null){
+          return new Text(
+            '${data.data.toString()}',
+            style: new TextStyle(
+              fontSize: 22.2,
+              color: Colors.blue,
+            ),);
+        }else{
+          return new Text(
+            'No data saved !',
+            style: new TextStyle(
+              fontSize: 11.0,
+              color: Colors.blue,
+            ),
+          );
+        }
 
+      }
+  ) ;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -99,32 +128,14 @@ class _LoginPageState extends State<LoginPage> {
                  writeData1(benutzerController.text);
 
                   print('saved !');
+                  print(getdata1().toString());
                 },
                 child: Text('Anmelden'),
               ),
               Container(
                 padding: EdgeInsets.all(20.00),
-                  child: new FutureBuilder(
-                  future: readData(),
-                  builder: (BuildContext context , AsyncSnapshot<String> data){
-                    if(data.hasData != null){
-                      return new Text(
-                        '${data.data.toString()}',
-                        style: new TextStyle(
-                          fontSize: 22.2,
-                          color: Colors.blue,
-                        ),);
-                    }else{
-                      return new Text(
-                        'No data saved !',
-                        style: new TextStyle(
-                          fontSize: 11.0,
-                          color: Colors.blue,
-                        ),);
-                    }
-
-                  }
-              )),
+                  child: getfutur(),
+              ),
               Container(
                   padding: EdgeInsets.all(20.00),
                   child: new FutureBuilder(
@@ -207,4 +218,4 @@ class _LoginPageState extends State<LoginPage> {
       return 'error: empty file';
     }
   }
-}
+}*/

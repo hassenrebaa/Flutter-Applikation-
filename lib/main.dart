@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/test-save.dart';
 import 'Einstellung.dart';
-import 'Model-json.dart';
 import 'chat.dart';
-import 'infos.dart';
 
 
 
@@ -46,13 +45,11 @@ class _HomeState extends State<Home>{
   ],),
   ),
     Center(child: ChatDetails(),),
-    Center(child: MyApp()
-    ),
-    Center(child: CustomCheckbox(),),
+    Center(child: MyApp()),
+    Center(child: FlutterDemo(),),
 
   ];
 
-  static set ob(CustomCheckbox ob) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,8 +88,11 @@ class _HomeState extends State<Home>{
           )
         ],
         onTap: (index){{
+
           setState(() {
               _currentIndex = index;
+
+
           });
           }
         },
