@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Attachment.dart';
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
-
-
-
+import 'package:random_string/random_string.dart';
 
 class ChatDetails extends StatefulWidget {
   ChatDetails({
@@ -31,11 +26,11 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   var  pong = new _LoginPageState();
   final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
-
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot;
   String server="";
   String usr="";
+  DateTime _dateTime;
 
 
 
@@ -45,14 +40,11 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       '$server',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'historyID' : 'dsdsadsadasdasddsds',
+        'historyID' : '$historyID',
         'username':  '$usr',
       },
       body: jsonEncode({
-        "text": '${text}' ,
-
-
-
+        "text": '${text}',
       }),
     );
     final jsonresponse = json.decode(response1.body);
@@ -64,18 +56,14 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       print(jsonresponse[0]);
       print(server);
       print(usr);
+      print(historyID.toString());
+
 
       return test;
     } else {
       throw Exception('Failed to create...');
     }
   }
-
-
-
-
-
-
   Widget _buildTextComposer() {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
@@ -106,6 +94,32 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                 },
               ),
             ),
+            Container(child:  IconButton(
+              icon: Icon(Icons.calendar_today),
+              onPressed: () async {
+                showDatePicker(
+                    context: context,
+                    initialDate: _dateTime == null ? DateTime.now() : _dateTime,
+                    firstDate: DateTime(2001),
+                    lastDate: DateTime(2021)
+                ).then((date) {
+                  setState(() async{
+                    _dateTime = date;
+                    print(_dateTime);
+
+                    final Attachment1 alb = await createAlbum(_dateTime.toString());
+               setState(() {
+               bot= alb;
+
+               response(bot.text);
+
+                  });
+                  });
+                });
+
+              },
+            ),
+            )
           ],
         ),
       ),
@@ -123,9 +137,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
     });
   }
-
-
-
   void _handleSubmitted(String text) {
     _textController.clear();
     ChatMessage message = ChatMessage(
@@ -136,10 +147,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       _messages.insert(0, message,);
     });
     response(text);
-
   }
-
-
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
@@ -198,8 +206,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               ),
             ])
     );
-
-
 }
 texto1()async{
 
@@ -211,14 +217,19 @@ texto1()async{
     await pong.readData1().then((String data) => usr=data);
 
   }
-
     @override
   void initState() {
     super.initState();
     texto1();
     texto2();
+    id();
   }
+String historyID="";
+   String id(){
+    historyID= randomString(10);
+    return historyID;
 
+  }
   }
 
 class ChatMessage extends StatelessWidget {
@@ -231,33 +242,6 @@ class ChatMessage extends StatelessWidget {
   final bool type;
  final pop = _HomePageDialogflowV2();
 
-
- Widget roboter() {
-   return
-   Row(children: <Widget>[ Container(
- margin: const EdgeInsets.only(right: 16.0),
-   child: CircleAvatar(
-   backgroundImage: AssetImage('Images/bot.png'),
-   backgroundColor: Colors.teal,
-   radius: 15,
-   ),
-   ),
-   Expanded(
-   child: Column(
-   crossAxisAlignment: CrossAxisAlignment.start,
-   children: <Widget>[
-
-   Container(
-   child:  Text("hi"),
-
-   ),
-
-   ],
-   ),
-   ),
-   ],
-   );
- }
 
   List<Widget> otherMessage(context) {
     return <Widget>[
@@ -277,14 +261,6 @@ class ChatMessage extends StatelessWidget {
             Container(
               child:  Text(text),
 
-            ),
-
-            Container(
-
-              child :Linkify(
-                onOpen: (link) => print("Clicked ${link}!"),
-                text: "adesso.de",
-              ),
             ),
           ],
         ),
@@ -322,8 +298,6 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
 return
     Container(
     margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -334,11 +308,7 @@ return
     this.type ? myMessage(context) : otherMessage(context),
     ),
     );
-
-
-
-
-  }
+ }
 }
 class LoginPage extends StatefulWidget {
   @override
@@ -351,66 +321,12 @@ test(){
 
 class _LoginPageState extends State<LoginPage> {
 
-
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _Benutzername , _password,_URL;
   TextEditingController serverController = new TextEditingController();
   TextEditingController benutzerController = new TextEditingController();
   var  urlserver="";
   var  username="";
-
- /* Widget getfutur() {
-    return
-      new FutureBuilder(
-          future: readData(),
-          builder: (BuildContext context , AsyncSnapshot<String> data){
-            if(data.hasData != null){
-              return new Text(
-                '${data.data.toString()}',
-                style: new TextStyle(
-                  fontSize: 22.2,
-                  color: Colors.blue,
-                ),);
-            }else{
-              return new Text(
-                'No data saved !',
-                style: new TextStyle(
-                  fontSize: 11.0,
-                  color: Colors.blue,
-                ),
-              );
-            }
-
-          }
-      ) ;
-  }
-  Widget getfutur1() {
-    return
-      new FutureBuilder(
-          future: readData1(),
-          builder: (BuildContext context , AsyncSnapshot<String> data){
-            if(data.hasData != null){
-              return new Text(
-                '${data.data.toString()}',
-                style: new TextStyle(
-                  fontSize: 22.2,
-                  color: Colors.blue,
-                ),);
-            }else{
-              return new Text(
-                'No data saved !',
-                style: new TextStyle(
-                  fontSize: 11.0,
-                  color: Colors.blue,
-                ),
-              );
-            }
-
-          }
-      ) ;
-  }*/
-
    texto() async{
 
     readData().then((String data){
@@ -435,14 +351,9 @@ class _LoginPageState extends State<LoginPage> {
    texto();
    textou();
   }
-
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-
-
-
         body: ListView( key: _formKey,
           children: <Widget>[
             Column(
@@ -462,25 +373,25 @@ class _LoginPageState extends State<LoginPage> {
                     leading: Icon(Icons.settings, color:Colors.blue,),
                   ),
                 ),
-                TextFormField(
-                  validator: (input) {
-                    if (input.isEmpty) {
-                      return 'Provide an Sever URL';
-                    }
-                  },
-                  controller: serverController,
-                  decoration: InputDecoration(
-                    labelText: 'Server URL',
 
-
-
+                   TextFormField(
+                    validator: (input) {
+                      if (input.isEmpty) {
+                        return 'Provide an Sever URL';
+                      }
+                    },
+                    controller: serverController,
+                    decoration: InputDecoration(
+                      hintText: urlserver,
+                      icon: Icon(Icons.link),
+                    ),
+                    onSaved: (input) => _URL= input,
                   ),
-                  onSaved: (input) => _URL= input,
-                ),
 
-
-
-
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                  height: 70,
+                  child:
                 TextFormField(
                   validator: (input) {
                     if (input.isEmpty) {
@@ -488,14 +399,20 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   controller: benutzerController,
+
                   decoration: InputDecoration(
-                    labelText: 'Benutzername',
-
-
-
+                    icon: Icon(Icons.person),
+                    hintText: username,
                   ),
                   onSaved: (input) => _Benutzername = input,
                 ),
+
+
+                  ),
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                  height: 70,
+                  child:
                 TextFormField(
                   validator: (input) {
                     if (input.length < 6) {
@@ -503,33 +420,26 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   decoration: InputDecoration(
-                      labelText: 'Password'
+                    labelText: 'Password',
+                    icon: Icon(Icons.lock),
                   ),
                   onSaved: (input) => _password = input,
                   obscureText: true,
                 ),
+
+                ),
+
                 RaisedButton(
                   onPressed: () {
                     writeData(serverController.text);
                     writeData1(benutzerController.text);
-
-                    print('saved !');
+                    print('saved!');
                     print(urlserver);
                     print(username);
                   },
                   child: Text('Anmelden'),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text("serverurl: $urlserver",style: TextStyle(
-    color: Colors.blueAccent, fontSize: 13, fontWeight: FontWeight.bold )),
-                ),
-                Container(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text("username: $username",style: TextStyle(
-    color: Colors.blueAccent, fontSize: 15, fontWeight: FontWeight.bold)),
-
-                ),],
+              ],
             ),
           ],
         )
@@ -543,18 +453,14 @@ class _LoginPageState extends State<LoginPage> {
     final path = await getApplicationDocumentsDirectory();
     return path.path;
   }
-
   Future<File> get localFile  async{
     final file = await localPath;
     return new File('$file/data1.txt');
   }
-
   Future<File> get localFile1  async{
     final file = await localPath1;
     return new File('$file/data2.txt');
   }
-
-
   Future<File>   writeData(String value)  async{
     final file = await localFile;
     return file.writeAsString('${value}');
@@ -563,10 +469,7 @@ class _LoginPageState extends State<LoginPage> {
     final file = await localFile1;
     return file.writeAsString('${value}');
   }
-
-
   Future<String> readData() async{
-
     try{
       final file = await localFile;
       String data = await file.readAsString();
@@ -575,9 +478,7 @@ class _LoginPageState extends State<LoginPage> {
       return 'error: empty file';
     }
   }
-
   Future<String> readData1() async{
-
     try{
       final file = await localFile1;
       String data1 = await file.readAsString();
@@ -586,6 +487,5 @@ class _LoginPageState extends State<LoginPage> {
       return 'error: empty file';
     }
   }
-
 }
 
