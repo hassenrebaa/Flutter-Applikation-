@@ -16,7 +16,7 @@ class ChatDetails extends StatefulWidget {
   }) : super(key: key);
 
   final String title;
-
+  var  piw = new _HomePageDialogflowV2();
 
   @override
   _HomePageDialogflowV2 createState() => _HomePageDialogflowV2();
@@ -110,9 +110,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                     final Attachment1 alb = await createAlbum(_dateTime.toString());
                setState(() {
                bot= alb;
-
                response(bot.text);
-
                   });
                   });
                 });
@@ -137,6 +135,20 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
     });
   }
+  void response1(String text) async {
+    ChatMessage message = ChatMessage(
+      text: "Hallo, welche Frage zur Veranstaltung kann ich dir beantworten?",
+      type: false,
+    );
+
+    setState(() {
+      _messages.insert(0, message);
+
+    });
+  }
+
+
+
   void _handleSubmitted(String text) {
     _textController.clear();
     ChatMessage message = ChatMessage(
@@ -148,68 +160,33 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     });
     response(text);
   }
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
-            children: [
-              Flexible(
-                flex: 2,
-                child:
-                ListView(
-                    children: <Widget>[
-                      Container(
-                        child: Row(
-                            children: <Widget>[
-                              Container(
-                                margin: const EdgeInsets.only(right: 16.0),
-                                child:
-                                CircleAvatar(
-
-                                  backgroundImage: AssetImage('Images/bot.png'),
-                                  backgroundColor: Colors.teal,
-                                  radius: 15,
-                                ),
-                              ),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 16.0),
-                                    child:  Text("Hey, was kann ich für Sie tun?"),
-
-                                  ),
-                                ],
-                              ),
-                            ]),
-                      ),
-                      Expanded(child:
-                      ListView.builder(
-                        physics: ScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(8.0),
-                        reverse: true,
-                        itemBuilder: (_, int index) => _messages[index],
-                        itemCount: _messages.length,
-                      ),
-                      )
-                    ]),
-              ),
-              Divider(height: 1.0),
-              Flexible(
-                flex: 0,
-                child:
-                Container(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                  child: _buildTextComposer(),
-                ),
-              ),
-            ])
+    return new Scaffold(
+      body: new Column(children: <Widget>[
+        new Flexible(
+            child: new ListView.builder(
+              padding: new EdgeInsets.all(8.0),
+              reverse: true,
+              shrinkWrap: false,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+            )
+        ),
+        new Divider(height: 1.0),
+        new Container(
+          decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+          child: _buildTextComposer(),
+        ),
+      ]),
     );
-}
+  }
+
+
 texto1()async{
 
   await pong.readData().then((String data) => server=data);
+
 
   }
   texto2()async{
@@ -217,8 +194,12 @@ texto1()async{
     await pong.readData1().then((String data) => usr=data);
 
   }
+  String txt = "";
     @override
   void initState() {
+      setState(() {
+   response1(txt);
+      });
     super.initState();
     texto1();
     texto2();
@@ -230,7 +211,10 @@ String historyID="";
     return historyID;
 
   }
-  }
+
+
+}
+
 
 class ChatMessage extends StatelessWidget {
   ChatMessage({

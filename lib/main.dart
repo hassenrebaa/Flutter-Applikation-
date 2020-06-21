@@ -29,6 +29,7 @@ class Home extends StatefulWidget {
 }
 class _HomeState extends State<Home>{
   int _currentIndex = 0;
+  var  poo = new ChatDetails();
   final tabs=[
     Center(
       child: Column(
@@ -85,13 +86,19 @@ class _HomeState extends State<Home>{
             title: Text('Info'),
             backgroundColor: Colors.lightBlueAccent,
 
+
           )
         ],
         onTap: (index){{
+     String text="hi";
 
           setState(() {
               _currentIndex = index;
+           if (index==1){
 
+
+
+           }
 
           });
           }
