@@ -28,9 +28,13 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot;
-  String server="https://runtime-demo.eu-de.mybluemix.net/api/chat";
+  String server="";
   String usr="";
   DateTime _dateTime;
+  bool _visible = true;
+  String txt = "";
+
+
 
   Future<Attachment1> createAlbum(String text) async {
 
@@ -50,10 +54,12 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     att.add(test);
     if (response1.statusCode == 200) {
 
-    /*  print(jsonresponse[0]);
+
+      print(jsonresponse[0]);
       print(server);
       print(usr);
-      print(historyID.toString());*/
+      print(historyID.toString());
+
 
       return test;
     } else {
@@ -120,26 +126,26 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
   }
   void response(query) async {
+
     ChatMessage message = ChatMessage(
       text: "${bot.text}",
       type: false,
     );
+
     setState(() {
       _messages.insert(0, message);
+
     });
   }
-
-  get tt => response({
-    txt : "hey",
-  });
-
   void response1(String text) async {
     ChatMessage message = ChatMessage(
-      text: createAlbum(tt).toString(),
+      text: "Hallo, welche Frage zur Veranstaltung kann ich dir beantworten?",
       type: false,
     );
+
     setState(() {
       _messages.insert(0, message);
+
     });
   }
 
@@ -156,10 +162,36 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     });
     response(text);
   }
+Widget _chatbutton(){
+  return SizedBox(
+    width: 150,
+    height: 70,
+    child: RaisedButton(
+    color: Colors.blueAccent,
+    child: Text("Chat starten!"),
+    onPressed: ()async {
+      final Attachment1 alb = await createAlbum(txt);
+      setState(() {
+        bot= alb;
+        response(bot.text);
+        _visible = !_visible;
+      });
+      // Call setState. This tells Flutter to rebuild the
+      // UI with the changes.
+    },
+  ),);
+
+
+}
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Column(children: <Widget>[
+      body: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
         new Flexible(
             child: new ListView.builder(
               padding: new EdgeInsets.all(8.0),
@@ -170,28 +202,31 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
             )
         ),
         new Divider(height: 1.0),
-        new Container(
-          decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-          child: _buildTextComposer(),
-        ),
+      Container(child: _visible?_chatbutton():new Container(
+        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+        child: _buildTextComposer(),
+      ),
+    ),
+
+
       ]),
     );
   }
 
 
 texto1()async{
+
   await pong.readData().then((String data) => server=data);
+
+
   }
   texto2()async{
+
     await pong.readData1().then((String data) => usr=data);
+
   }
-  
-  String txt = "";
     @override
   void initState() {
-      setState(() {
-   response1(txt);
-      });
     super.initState();
     texto1();
     texto2();
@@ -201,8 +236,12 @@ String historyID="";
    String id(){
     historyID= randomString(10);
     return historyID;
+
   }
+
+
 }
+
 
 class ChatMessage extends StatelessWidget {
   ChatMessage({
@@ -398,7 +437,9 @@ class _LoginPageState extends State<LoginPage> {
                   onSaved: (input) => _password = input,
                   obscureText: true,
                 ),
+
                 ),
+
                 RaisedButton(
                   onPressed: () {
                     writeData(serverController.text);
