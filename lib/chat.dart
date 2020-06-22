@@ -31,6 +31,8 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   String server="";
   String usr="";
   DateTime _dateTime;
+  bool _visible = true;
+  String txt = "";
 
 
 
@@ -160,10 +162,36 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     });
     response(text);
   }
+Widget _chatbutton(){
+  return SizedBox(
+    width: 150,
+    height: 70,
+    child: RaisedButton(
+    color: Colors.blueAccent,
+    child: Text("Chat starten!"),
+    onPressed: ()async {
+      final Attachment1 alb = await createAlbum(txt);
+      setState(() {
+        bot= alb;
+        response(bot.text);
+        _visible = !_visible;
+      });
+      // Call setState. This tells Flutter to rebuild the
+      // UI with the changes.
+    },
+  ),);
+
+
+}
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Column(children: <Widget>[
+      body: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
         new Flexible(
             child: new ListView.builder(
               padding: new EdgeInsets.all(8.0),
@@ -174,10 +202,13 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
             )
         ),
         new Divider(height: 1.0),
-        new Container(
-          decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-          child: _buildTextComposer(),
-        ),
+      Container(child: _visible?_chatbutton():new Container(
+        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+        child: _buildTextComposer(),
+      ),
+    ),
+
+
       ]),
     );
   }
@@ -194,12 +225,8 @@ texto1()async{
     await pong.readData1().then((String data) => usr=data);
 
   }
-  String txt = "";
     @override
   void initState() {
-      setState(() {
-   response1(txt);
-      });
     super.initState();
     texto1();
     texto2();
