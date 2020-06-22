@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapp/test-save.dart';
 import 'Einstellung.dart';
 import 'chat.dart';
+import 'infos.dart';
 
 
 
@@ -59,6 +59,7 @@ class _HomeState extends State<Home>{
       ),
       body:tabs[_currentIndex],
       bottomNavigationBar:BottomNavigationBar(
+
           currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         items: [

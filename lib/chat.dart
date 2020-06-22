@@ -28,11 +28,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot;
-  String server="";
+  String server="https://runtime-demo.eu-de.mybluemix.net/api/chat";
   String usr="";
   DateTime _dateTime;
-
-
 
   Future<Attachment1> createAlbum(String text) async {
 
@@ -52,12 +50,10 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     att.add(test);
     if (response1.statusCode == 200) {
 
-
-      print(jsonresponse[0]);
+    /*  print(jsonresponse[0]);
       print(server);
       print(usr);
-      print(historyID.toString());
-
+      print(historyID.toString());*/
 
       return test;
     } else {
@@ -124,26 +120,26 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     );
   }
   void response(query) async {
-
     ChatMessage message = ChatMessage(
       text: "${bot.text}",
       type: false,
     );
-
     setState(() {
       _messages.insert(0, message);
-
     });
   }
+
+  get tt => response({
+    txt : "hey",
+  });
+
   void response1(String text) async {
     ChatMessage message = ChatMessage(
-      text: "Hallo, welche Frage zur Veranstaltung kann ich dir beantworten?",
+      text: createAlbum(tt).toString(),
       type: false,
     );
-
     setState(() {
       _messages.insert(0, message);
-
     });
   }
 
@@ -184,16 +180,12 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
 
 texto1()async{
-
   await pong.readData().then((String data) => server=data);
-
-
   }
   texto2()async{
-
     await pong.readData1().then((String data) => usr=data);
-
   }
+  
   String txt = "";
     @override
   void initState() {
@@ -209,12 +201,8 @@ String historyID="";
    String id(){
     historyID= randomString(10);
     return historyID;
-
   }
-
-
 }
-
 
 class ChatMessage extends StatelessWidget {
   ChatMessage({
@@ -410,9 +398,7 @@ class _LoginPageState extends State<LoginPage> {
                   onSaved: (input) => _password = input,
                   obscureText: true,
                 ),
-
                 ),
-
                 RaisedButton(
                   onPressed: () {
                     writeData(serverController.text);
