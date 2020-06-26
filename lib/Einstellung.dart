@@ -52,8 +52,6 @@ class MyApp extends StatelessWidget {
 
                   Container(
 
-
-
                     padding:EdgeInsets.all(8.0) ,
                     margin: EdgeInsets.all(8.0),
                     alignment: Alignment.centerRight,
@@ -66,9 +64,6 @@ class MyApp extends StatelessWidget {
                       activeTrackColor: Colors.lightGreenAccent,
                       activeColor: Colors.green,
                     ),
-
-
-
                   ),
                 ],
               ),

@@ -9,6 +9,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:random_string/random_string.dart';
 
+import 'Attachment.dart';
+
 class ChatDetails extends StatefulWidget {
   ChatDetails({
     Key key,
@@ -26,14 +28,14 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   var  pong = new _LoginPageState();
   final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
+  final kong = new ChatMessage();
   final TextEditingController _textController = TextEditingController();
-  Attachment1 bot;
+  Attachment1 bot ;
   String server="";
   String usr="";
   DateTime _dateTime;
   bool _visible = true;
   String txt = "";
-
 
 
   Future<Attachment1> createAlbum(String text) async {
@@ -44,23 +46,22 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
         'Content-Type': 'application/json; charset=UTF-8',
         'historyID' : '$historyID',
         'username':  '$usr',
+        'configurationId': '5ed0d05b95b0ba16f9690d31',
       },
       body: jsonEncode({
         "text": '${text}',
       }),
     );
     final jsonresponse = json.decode(response1.body);
-    final test =Attachment1.fromJson(jsonresponse[0]);
-    att.add(test);
+ final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
+
     if (response1.statusCode == 200) {
-
-
       print(jsonresponse[0]);
       print(server);
       print(usr);
       print(historyID.toString());
-
-
+      print(test.attachments[0].type);
+      print(bot.attachments[0].id);
       return test;
     } else {
       throw Exception('Failed to create...');
@@ -192,11 +193,11 @@ Widget _chatbutton(){
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-        new Flexible(
+        new Expanded(
             child: new ListView.builder(
               padding: new EdgeInsets.all(8.0),
               reverse: true,
-              shrinkWrap: false,
+              shrinkWrap: true,
               itemBuilder: (_, int index) => _messages[index],
               itemCount: _messages.length,
             )
@@ -227,6 +228,7 @@ texto1()async{
   }
     @override
   void initState() {
+      createAlbum(txt);
     super.initState();
     texto1();
     texto2();
@@ -252,8 +254,6 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool type;
  final pop = _HomePageDialogflowV2();
-
-
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -273,6 +273,12 @@ class ChatMessage extends StatelessWidget {
               child:  Text(text),
 
             ),
+      // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
+         /*   new RaisedButton(child:Text ("m"), onPressed: (){
+
+             print(pop.bot.attachments[0].type);
+            }
+            )*/
           ],
         ),
       ),
@@ -310,6 +316,7 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 return
+
     Container(
     margin: const EdgeInsets.symmetric(vertical: 10.0),
     child: Row(
