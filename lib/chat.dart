@@ -8,13 +8,13 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:random_string/random_string.dart';
+import 'dart:convert';
 
 class ChatDetails extends StatefulWidget {
   ChatDetails({
     Key key,
     this.title,
   }) : super(key: key);
-
   final String title;
   var  piw = new _HomePageDialogflowV2();
 
@@ -28,13 +28,12 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot;
+  Attachment attach;
   String server="";
   String usr="";
   DateTime _dateTime;
   bool _visible = true;
   String txt = "";
-
-
 
   Future<Attachment1> createAlbum(String text) async {
 
@@ -44,17 +43,18 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
         'Content-Type': 'application/json; charset=UTF-8',
         'historyID' : '$historyID',
         'username':  '$usr',
+        'configurationId': '5ed0d05b95b0ba16f9690d31',
       },
       body: jsonEncode({
         "text": '${text}',
       }),
     );
-    final jsonresponse = json.decode(response1.body);
-    final test =Attachment1.fromJson(jsonresponse[0]);
+    var jsonresponse = json.decode(response1.body);
+    final  List<Attachment1>test =Attachment1.fromJson(jsonresponse[0]);
     att.add(test);
+
     if (response1.statusCode == 200) {
-
-
+      print(test.attachments);
       print(jsonresponse[0]);
       print(server);
       print(usr);
@@ -116,7 +116,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                   });
                   });
                 });
-
               },
             ),
             )
@@ -131,7 +130,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       text: "${bot.text}",
       type: false,
     );
-
     setState(() {
       _messages.insert(0, message);
 
@@ -218,12 +216,10 @@ texto1()async{
 
   await pong.readData().then((String data) => server=data);
 
-
   }
   texto2()async{
 
     await pong.readData1().then((String data) => usr=data);
-
   }
     @override
   void initState() {
@@ -236,13 +232,8 @@ String historyID="";
    String id(){
     historyID= randomString(10);
     return historyID;
-
   }
-
-
 }
-
-
 class ChatMessage extends StatelessWidget {
   ChatMessage({
     this.text,
@@ -251,7 +242,24 @@ class ChatMessage extends StatelessWidget {
 
   final String text;
   final bool type;
- final pop = _HomePageDialogflowV2();
+  final pop = _HomePageDialogflowV2();
+
+
+
+
+  Widget reiseB(String etwas){
+    return  RaisedButton(
+        color: Colors.blueAccent,
+        textColor: Colors.white,
+        elevation: 10.0,
+        highlightElevation: 30.0,
+        shape: Border.all(width: 2.0, color: Colors.black),
+        onPressed: () {},
+        child: Text(etwas),
+
+          // Call setState. This tells Flutter to rebuild the // UI with the changes.
+    ); }
+
 
 
   List<Widget> otherMessage(context) {
@@ -268,21 +276,26 @@ class ChatMessage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             Container(
               child:  Text(text),
-
             ),
+            Row(
+           children: <Widget>[
+            Container(
+              child: reiseB("manuell"),),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child:
+              reiseB("per Bild"),),
+           ] )
           ],
         ),
       ),
     ];
-
   }
 
   List<Widget> myMessage(context) {
     return <Widget>[
-
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -304,7 +317,6 @@ class ChatMessage extends StatelessWidget {
         ),
       ),
     ];
-
   }
 
   @override
@@ -328,10 +340,7 @@ class LoginPage extends StatefulWidget {
 test(){
   return null;
 }
-
-
 class _LoginPageState extends State<LoginPage> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _Benutzername , _password,_URL;
   TextEditingController serverController = new TextEditingController();
@@ -339,7 +348,6 @@ class _LoginPageState extends State<LoginPage> {
   var  urlserver="";
   var  username="";
    texto() async{
-
     readData().then((String data){
       setState(() {
         urlserver = data;
@@ -384,7 +392,6 @@ class _LoginPageState extends State<LoginPage> {
                     leading: Icon(Icons.settings, color:Colors.blue,),
                   ),
                 ),
-
                    TextFormField(
                     validator: (input) {
                       if (input.isEmpty) {
@@ -499,4 +506,3 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 }
-

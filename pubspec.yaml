@@ -38,6 +38,7 @@ dependencies:
   path_provider: 1.6.10
   shared_preferences: 0.4.3
   random_string: 2.0.1
+  json_annotation: ^0.2.3
 
 
 
@@ -45,6 +46,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable: ^0.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

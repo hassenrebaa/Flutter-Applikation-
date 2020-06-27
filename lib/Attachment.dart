@@ -2,12 +2,16 @@
 //
 //     final attachment1 = attachment1FromJson(jsonString);
 
+
 import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
 
 Attachment1 attachment1FromJson(String str) => Attachment1.fromJson(json.decode(str));
 
 String attachment1ToJson(Attachment1 data) => json.encode(data.toJson());
 
+@JsonSerializable()
 class Attachment1 {
   Attachment1({
     this.requestText,
@@ -25,7 +29,6 @@ class Attachment1 {
   dynamic requestText;
   String text;
   dynamic accessToken;
-  List<Attachment> attachments;
   dynamic action;
   dynamic encouragerTime;
   dynamic activeBot;
@@ -33,11 +36,15 @@ class Attachment1 {
   dynamic messageKey;
   bool error;
 
+  @JsonKey(name: "list")
+  final List<Attachment> attachments;
+
+
   factory Attachment1.fromJson(Map<String, dynamic> json) => Attachment1(
     requestText: json["requestText"],
     text: json["text"],
     accessToken: json["accessToken"],
-    attachments: List<Attachment>.from(json["attachments"].map((x) => Attachment.fromJson(x))),
+    attachments: (json['attachments'] as List).map((i) => Attachment.fromJson(i)).toList(),
     action: json["action"],
     encouragerTime: json["encouragerTime"],
     activeBot: json["activeBot"],
@@ -60,6 +67,7 @@ class Attachment1 {
   };
 }
 
+@JsonSerializable()
 class Attachment {
   Attachment({
     this.id,
@@ -119,3 +127,4 @@ class Attachment {
     "multipleChoiceOptions": multipleChoiceOptions,
   };
 }
+
