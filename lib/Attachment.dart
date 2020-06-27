@@ -2,16 +2,11 @@
 //
 //     final attachment1 = attachment1FromJson(jsonString);
 
-
 import 'dart:convert';
-
-import 'package:json_annotation/json_annotation.dart';
 
 Attachment1 attachment1FromJson(String str) => Attachment1.fromJson(json.decode(str));
 
-String attachment1ToJson(Attachment1 data) => json.encode(data.toJson());
 
-@JsonSerializable()
 class Attachment1 {
   Attachment1({
     this.requestText,
@@ -29,6 +24,7 @@ class Attachment1 {
   dynamic requestText;
   String text;
   dynamic accessToken;
+  List<Attachment> attachments;
   dynamic action;
   dynamic encouragerTime;
   dynamic activeBot;
@@ -36,15 +32,11 @@ class Attachment1 {
   dynamic messageKey;
   bool error;
 
-  @JsonKey(name: "list")
-  final List<Attachment> attachments;
-
-
   factory Attachment1.fromJson(Map<String, dynamic> json) => Attachment1(
     requestText: json["requestText"],
     text: json["text"],
     accessToken: json["accessToken"],
-    attachments: (json['attachments'] as List).map((i) => Attachment.fromJson(i)).toList(),
+    attachments: parseAtachment(json),
     action: json["action"],
     encouragerTime: json["encouragerTime"],
     activeBot: json["activeBot"],
@@ -52,22 +44,14 @@ class Attachment1 {
     messageKey: json["messageKey"],
     error: json["error"],
   );
+  static List<Attachment> parseAtachment(AttachmentJson) {
+    var list = AttachmentJson['attachments'] as List;
+    List<Attachment> AtatchmentList = list?.map((e)  => Attachment.fromJson(e))?.toList()??[];
+    return AtatchmentList;
+  }
 
-  Map<String, dynamic> toJson() => {
-    "requestText": requestText,
-    "text": text,
-    "accessToken": accessToken,
-    "attachments": List<dynamic>.from(attachments.map((x) => x.toJson())),
-    "action": action,
-    "encouragerTime": encouragerTime,
-    "activeBot": activeBot,
-    "botName": botName,
-    "messageKey": messageKey,
-    "error": error,
-  };
 }
 
-@JsonSerializable()
 class Attachment {
   Attachment({
     this.id,
@@ -97,34 +81,20 @@ class Attachment {
   dynamic mediaType;
   dynamic multipleChoiceOptions;
 
-  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
-    id: json["id"],
-    type: json["type"],
-    filename: json["filename"],
-    thumbnailFilename: json["thumbnailFilename"],
-    title: json["title"],
-    action: json["action"],
-    video: json["video"],
-    link: json["link"],
-    accordionText: json["accordionText"],
-    datePickerRange: json["datePickerRange"],
-    mediaType: json["mediaType"],
-    multipleChoiceOptions: json["multipleChoiceOptions"],
-  );
+  factory Attachment.fromJson(Map<String, dynamic> parsedjson) =>
+      Attachment(
+        id: parsedjson["id"],
+        type: parsedjson["type"],
+        filename: parsedjson["filename"],
+        thumbnailFilename: parsedjson["thumbnailFilename"],
+        title: parsedjson["title"],
+        action: parsedjson["action"],
+        video: parsedjson["video"],
+        link: parsedjson["link"],
+        accordionText: parsedjson["accordionText"],
+        datePickerRange: parsedjson["datePickerRange"],
+        mediaType: parsedjson["mediaType"],
+        multipleChoiceOptions: parsedjson["multipleChoiceOptions"],
+      );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "type": type,
-    "filename": filename,
-    "thumbnailFilename": thumbnailFilename,
-    "title": title,
-    "action": action,
-    "video": video,
-    "link": link,
-    "accordionText": accordionText,
-    "datePickerRange": datePickerRange,
-    "mediaType": mediaType,
-    "multipleChoiceOptions": multipleChoiceOptions,
-  };
 }
-
