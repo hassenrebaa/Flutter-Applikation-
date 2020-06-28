@@ -28,7 +28,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   var  pong = new _LoginPageState();
   final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
-  final kong = new ChatMessage();
+ // final kong = new ChatMessage();
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot ;
   String server="";
@@ -36,7 +36,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   DateTime _dateTime;
   bool _visible = true;
   String txt = "";
-
+  Future<Attachment1> _futureAlbum;
 
   Future<Attachment1> createAlbum(String text) async {
 
@@ -60,8 +60,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       print(server);
       print(usr);
       print(historyID.toString());
-      print(test.attachments[0].type);
-      print(bot.attachments[0].id);
+      //print(test.attachments[0].type);
+      //print(bot.attachments[0].id);
+      print(futur().toString());
       return test;
     } else {
       throw Exception('Failed to create...');
@@ -88,7 +89,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed:  () async{
-
+                  _futureAlbum = createAlbum(_textController.text);
                   final Attachment1 alb = await createAlbum(_textController.text);
                   setState(() {
                     bot= alb;
@@ -131,6 +132,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     ChatMessage message = ChatMessage(
       text: "${bot.text}",
       type: false,
+
     );
 
     setState(() {
@@ -138,19 +140,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
     });
   }
-  void response1(String text) async {
-    ChatMessage message = ChatMessage(
-      text: "Hallo, welche Frage zur Veranstaltung kann ich dir beantworten?",
-      type: false,
-    );
-
-    setState(() {
-      _messages.insert(0, message);
-
-    });
-  }
-
-
 
   void _handleSubmitted(String text) {
     _textController.clear();
@@ -184,6 +173,21 @@ Widget _chatbutton(){
 
 
 }
+  Widget futur (){
+    return
+      FutureBuilder<Attachment1>(
+        future: _futureAlbum,
+        builder: (context, snapshot) {
+          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON") {
+            return Text("ok");
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return CircularProgressIndicator();
+        },
+      );
+  }
+
 
 
   @override
@@ -203,6 +207,7 @@ Widget _chatbutton(){
             )
         ),
         new Divider(height: 1.0),
+      Container(child: futur(),),
       Container(child: _visible?_chatbutton():new Container(
         decoration: new BoxDecoration(color: Theme.of(context).cardColor),
         child: _buildTextComposer(),
@@ -226,13 +231,15 @@ texto1()async{
     await pong.readData1().then((String data) => usr=data);
 
   }
+
     @override
   void initState() {
-      createAlbum(txt);
+      //createAlbum(txt);
     super.initState();
     texto1();
     texto2();
     id();
+    futur();
   }
 String historyID="";
    String id(){
@@ -240,8 +247,6 @@ String historyID="";
     return historyID;
 
   }
-
-
 }
 
 
@@ -249,11 +254,12 @@ class ChatMessage extends StatelessWidget {
   ChatMessage({
     this.text,
     this.type,
+    this.pop,
   });
 
   final String text;
   final bool type;
- final pop = _HomePageDialogflowV2();
+ _HomePageDialogflowV2 pop =new  _HomePageDialogflowV2();
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -273,6 +279,19 @@ class ChatMessage extends StatelessWidget {
               child:  Text(text),
 
             ),
+           /* Container(
+              child:FutureBuilder<Attachment1>(
+                future:pop._futureAlbum,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData&&pop.bot.attachments[0].type=="BUTTON") {
+                    return Text("ok");
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return CircularProgressIndicator();
+                },
+              ) ,
+            ),*/
       // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
          /*   new RaisedButton(child:Text ("m"), onPressed: (){
 
