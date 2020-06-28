@@ -4,14 +4,12 @@ import 'Einstellung.dart';
 import 'chat.dart';
 import 'infos.dart';
 
-
-
-
-void main()  => runApp(
-    MaterialApp(
-        title : 'Energie App',
-        home: Home()));
-
+void main() {
+    runApp(
+        MaterialApp(
+            title: 'Energie App',
+            home: Home()));
+  }
 /// This Widget is the main application widget.
 class Home extends StatefulWidget {
 
