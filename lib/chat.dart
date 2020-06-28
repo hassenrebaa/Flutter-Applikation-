@@ -31,6 +31,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
  // final kong = new ChatMessage();
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot ;
+  Attachment1 bot1 ;
   String server="";
   String usr="";
   DateTime _dateTime;
@@ -173,17 +174,39 @@ Widget _chatbutton(){
 
 
 }
+  String manu ="manuell";
+  String bild ="Bild";
   Widget futur (){
     return
       FutureBuilder<Attachment1>(
         future: _futureAlbum,
         builder: (context, snapshot) {
-          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON") {
-            return Text("ok");
+          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON") {
+            return Row(children: <Widget>[RaisedButton(
+            child: Text("manuell") ,
+          onPressed: ()async {
+            final Attachment1 alb1 =  await createAlbum(manu);
+
+         setState(() {
+           bot1=alb1;
+           response(bot1.text);
+          });
+          _handleSubmitted(manu);
+          },
+          ),
+          RaisedButton(
+          child: Text("Bild") ,
+          onPressed: ()async {
+          await createAlbum(bild);
+          setState(() {
+
+          });
+          },
+          )],);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return CircularProgressIndicator();
+          return new Container();
         },
       );
   }
@@ -279,18 +302,8 @@ class ChatMessage extends StatelessWidget {
               child:  Text(text),
 
             ),
-           /* Container(
-              child:FutureBuilder<Attachment1>(
-                future:pop._futureAlbum,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData&&pop.bot.attachments[0].type=="BUTTON") {
-                    return Text("ok");
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return CircularProgressIndicator();
-                },
-              ) ,
+           /* Container( child:
+            Text( "${pop.futur()}")
             ),*/
       // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
          /*   new RaisedButton(child:Text ("m"), onPressed: (){
@@ -339,7 +352,6 @@ return
     Container(
     margin: const EdgeInsets.symmetric(vertical: 10.0),
     child: Row(
-
     crossAxisAlignment: CrossAxisAlignment.start,
     children:
     this.type ? myMessage(context) : otherMessage(context),
