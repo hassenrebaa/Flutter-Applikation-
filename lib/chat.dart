@@ -60,10 +60,8 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       print(server);
       print(usr);
       print(historyID.toString());
-      //print(test.attachments[0].type);
-      //print(bot.attachments[0].id);
-      print(futur().toString());
-      return test;
+
+        return test;
     } else {
       throw Exception('Failed to create...');
     }
@@ -179,7 +177,7 @@ Widget _chatbutton(){
         future: _futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.hasData&&bot.attachments[0].type=="BUTTON") {
-            return Text("ok");
+            return RaisedButton();
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -187,9 +185,6 @@ Widget _chatbutton(){
         },
       );
   }
-
-
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
