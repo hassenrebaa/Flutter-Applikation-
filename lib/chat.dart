@@ -28,7 +28,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   var  pong = new _LoginPageState();
   final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
-  // final kong = new ChatMessage();
+ // final kong = new ChatMessage();
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot ;
   String server="";
@@ -53,7 +53,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       }),
     );
     final jsonresponse = json.decode(response1.body);
-    final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
+ final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
 
     if (response1.statusCode == 200) {
       print(jsonresponse[0]);
@@ -62,7 +62,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       print(historyID.toString());
       //print(test.attachments[0].type);
       //print(bot.attachments[0].id);
-
+      print(futur().toString());
       return test;
     } else {
       throw Exception('Failed to create...');
@@ -112,10 +112,10 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                     print(_dateTime);
 
                     final Attachment1 alb = await createAlbum(_dateTime.toString());
-                    setState(() {
-                      bot= alb;
-                      response(bot.text);
-                    });
+               setState(() {
+               bot= alb;
+               response(bot.text);
+                  });
                   });
                 });
 
@@ -132,6 +132,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     ChatMessage message = ChatMessage(
       text: "${bot.text}",
       type: false,
+
     );
 
     setState(() {
@@ -139,18 +140,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
     });
   }
-  void response1(String text) async {
-    ChatMessage message = ChatMessage(
-      text: "Hallo, welche Frage zur Veranstaltung kann ich dir beantworten?",
-      type: false,
-    );
-
-    setState(() {
-      _messages.insert(0, message);
-
-    });
-  }
-
 
   void _handleSubmitted(String text) {
     _textController.clear();
@@ -163,27 +152,27 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     });
     response(text);
   }
-  Widget _chatbutton(){
-    return SizedBox(
-      width: 150,
-      height: 70,
-      child: RaisedButton(
-        color: Colors.blueAccent,
-        child: Text("Chat starten!"),
-        onPressed: ()async {
-          final Attachment1 alb = await createAlbum(txt);
-          setState(() {
-            bot= alb;
-            response(bot.text);
-            _visible = !_visible;
-          });
-          // Call setState. This tells Flutter to rebuild the
-          // UI with the changes.
-        },
-      ),);
+Widget _chatbutton(){
+  return SizedBox(
+    width: 150,
+    height: 70,
+    child: RaisedButton(
+    color: Colors.blueAccent,
+    child: Text("Chat starten!"),
+    onPressed: ()async {
+      final Attachment1 alb = await createAlbum(txt);
+      setState(() {
+        bot= alb;
+        response(bot.text);
+        _visible = !_visible;
+      });
+      // Call setState. This tells Flutter to rebuild the
+      // UI with the changes.
+    },
+  ),);
 
 
-  }
+}
   Widget futur (){
     return
       FutureBuilder<Attachment1>(
@@ -208,32 +197,32 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Expanded(
-                child: new ListView.builder(
-                  padding: new EdgeInsets.all(8.0),
-                  reverse: true,
-                  shrinkWrap: true,
-                  itemBuilder: (_, int index) => _messages[index],
-                  itemCount: _messages.length,
-                )
-            ),
-            new Divider(height: 1.0),
-            Container(child: futur(),),
-            Container(child: _visible?_chatbutton():new Container(
-              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-              child: _buildTextComposer(),
-            ),
-            ),
+        new Expanded(
+            child: new ListView.builder(
+              padding: new EdgeInsets.all(8.0),
+              reverse: true,
+              shrinkWrap: true,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+            )
+        ),
+        new Divider(height: 1.0),
+      Container(child: futur(),),
+      Container(child: _visible?_chatbutton():new Container(
+        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+        child: _buildTextComposer(),
+      ),
+    ),
 
 
-          ]),
+      ]),
     );
   }
 
 
-  texto1()async{
+texto1()async{
 
-    await pong.readData().then((String data) => server=data);
+  await pong.readData().then((String data) => server=data);
 
 
   }
@@ -243,24 +232,21 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
   }
 
-  @override
+    @override
   void initState() {
-    //createAlbum(txt);
+      //createAlbum(txt);
     super.initState();
     texto1();
     texto2();
     id();
     futur();
   }
-  String historyID="";
-  String id(){
+String historyID="";
+   String id(){
     historyID= randomString(10);
     return historyID;
 
   }
-
-
-
 }
 
 
@@ -273,7 +259,7 @@ class ChatMessage extends StatelessWidget {
 
   final String text;
   final bool type;
-  _HomePageDialogflowV2 pop =new  _HomePageDialogflowV2();
+ _HomePageDialogflowV2 pop =new  _HomePageDialogflowV2();
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -293,7 +279,7 @@ class ChatMessage extends StatelessWidget {
               child:  Text(text),
 
             ),
-            /* Container(
+           /* Container(
               child:FutureBuilder<Attachment1>(
                 future:pop._futureAlbum,
                 builder: (context, snapshot) {
@@ -306,8 +292,8 @@ class ChatMessage extends StatelessWidget {
                 },
               ) ,
             ),*/
-            // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
-            /*   new RaisedButton(child:Text ("m"), onPressed: (){
+      // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
+         /*   new RaisedButton(child:Text ("m"), onPressed: (){
 
              print(pop.bot.attachments[0].type);
             }
@@ -348,18 +334,18 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
+return
 
-      Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
+    Container(
+    margin: const EdgeInsets.symmetric(vertical: 10.0),
+    child: Row(
 
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-          this.type ? myMessage(context) : otherMessage(context),
-        ),
-      );
-  }
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children:
+    this.type ? myMessage(context) : otherMessage(context),
+    ),
+    );
+ }
 }
 class LoginPage extends StatefulWidget {
   @override
@@ -378,7 +364,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController benutzerController = new TextEditingController();
   var  urlserver="";
   var  username="";
-  texto() async{
+   texto() async{
 
     readData().then((String data){
       setState(() {
@@ -386,7 +372,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       return urlserver;
     });
-  }
+}
   textou() async{
 
     readData1().then((String data){
@@ -399,8 +385,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void initState() {
     super.initState();
-    texto();
-    textou();
+   texto();
+   textou();
   }
   @override
   Widget build(BuildContext context) {
@@ -425,58 +411,58 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
+                   TextFormField(
+                    validator: (input) {
+                      if (input.isEmpty) {
+                        return 'Provide an Sever URL';
+                      }
+                    },
+                    controller: serverController,
+                    decoration: InputDecoration(
+                      hintText: urlserver,
+                      icon: Icon(Icons.link),
+                    ),
+                    onSaved: (input) => _URL= input,
+                  ),
+
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                  height: 70,
+                  child:
                 TextFormField(
                   validator: (input) {
                     if (input.isEmpty) {
-                      return 'Provide an Sever URL';
+                      return 'Provide an Benutzername';
                     }
                   },
-                  controller: serverController,
+                  controller: benutzerController,
+
                   decoration: InputDecoration(
-                    hintText: urlserver,
-                    icon: Icon(Icons.link),
+                    icon: Icon(Icons.person),
+                    hintText: username,
                   ),
-                  onSaved: (input) => _URL= input,
+                  onSaved: (input) => _Benutzername = input,
                 ),
 
+
+                  ),
                 Container(
                   padding: EdgeInsets.only(top: 10,bottom: 10),
                   height: 70,
                   child:
-                  TextFormField(
-                    validator: (input) {
-                      if (input.isEmpty) {
-                        return 'Provide an Benutzername';
-                      }
-                    },
-                    controller: benutzerController,
-
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: username,
-                    ),
-                    onSaved: (input) => _Benutzername = input,
+                TextFormField(
+                  validator: (input) {
+                    if (input.length < 6) {
+                      return 'Longer password please';
+                    }
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    icon: Icon(Icons.lock),
                   ),
-
-
+                  onSaved: (input) => _password = input,
+                  obscureText: true,
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 10,bottom: 10),
-                  height: 70,
-                  child:
-                  TextFormField(
-                    validator: (input) {
-                      if (input.length < 6) {
-                        return 'Longer password please';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      icon: Icon(Icons.lock),
-                    ),
-                    onSaved: (input) => _password = input,
-                    obscureText: true,
-                  ),
 
                 ),
 
@@ -539,3 +525,4 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 }
+
