@@ -50,7 +50,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       },
       body: jsonEncode({
         "text": '${text}',
-      }),
+      }),sdddd
     );
     final jsonresponse = json.decode(response1.body);
     final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
