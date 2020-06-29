@@ -185,13 +185,12 @@ Widget _chatbutton(){
             return Row(children: <Widget>[RaisedButton(
             child: Text("manuell") ,
           onPressed: ()async {
-            final Attachment1 alb1 =  await createAlbum(manu);
+             await createAlbum(manu);
 
          setState(() {
-           bot1=alb1;
-           response(bot1.text);
+
+           response(bot.text);
           });
-          _handleSubmitted(manu);
           },
           ),
           RaisedButton(
@@ -199,7 +198,7 @@ Widget _chatbutton(){
           onPressed: ()async {
           await createAlbum(bild);
           setState(() {
-
+            response(bot.text);
           });
           },
           )],);
