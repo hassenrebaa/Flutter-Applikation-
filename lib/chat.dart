@@ -38,6 +38,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   bool _visible = true;
   String txt = "";
   Future<Attachment1> _futureAlbum;
+  bool block =true;
 
   Future<Attachment1> createAlbum(String text) async {
 
@@ -61,9 +62,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       print(server);
       print(usr);
       print(historyID.toString());
+      //print(bot.attachments[0].filename);
       //print(test.attachments[0].type);
       //print(bot.attachments[0].id);
-      print(futur().toString());
       return test;
     } else {
       throw Exception('Failed to create...');
@@ -79,6 +80,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
           children: <Widget>[
             Flexible(
               child: TextField(
+                enabled: block?true:false,
                 controller: _textController,
                 onSubmitted: _handleSubmitted,
                 decoration:
@@ -90,16 +92,23 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed:  () async{
+
                   _futureAlbum = createAlbum(_textController.text);
                   final Attachment1 alb = await createAlbum(_textController.text);
+
                   setState(() {
                     bot= alb;
+                    for(int i =0;i<bot.attachments.length;i++) {
+                      if (bot.attachments[i].type == "LOCK_INPUT"||bot.attachments[i].type == "DATE_PICKER") {
+                        block = !block;
+                      }
+                    }
                   });
                   _handleSubmitted(_textController.text);
                 },
               ),
             ),
-            Container(child:  IconButton(
+            /*Container(child:  IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () async {
                 showDatePicker(
@@ -122,7 +131,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
               },
             ),
-            )
+            )*/
           ],
         ),
       ),
@@ -182,26 +191,88 @@ Widget _chatbutton(){
         future: _futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON") {
-            return Row(children: <Widget>[RaisedButton(
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(20.00),
+                child: RaisedButton(
+                 
             child: Text("manuell") ,
           onPressed: ()async {
-             await createAlbum(manu);
+            final Attachment1 alb= await createAlbum("$manu");
 
          setState(() {
-
-           response(bot.text);
+        bot=alb;
           });
+         _handleSubmitted(txt);
           },
           ),
-          RaisedButton(
-          child: Text("Bild") ,
-          onPressed: ()async {
-          await createAlbum(bild);
-          setState(() {
-            response(bot.text);
-          });
-          },
+              ),
+          Container(
+            margin: EdgeInsets.all(20.00),
+            child: RaisedButton(
+            child: Text("Bild") ,
+            onPressed: ()async {
+            await createAlbum('${bot.attachments[0].action}');
+            setState(() {
+              response(bot.text);
+            });
+            },
+            ),
           )],);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return new Container();
+        },
+      );
+  }
+  Widget futur1 (){
+    return
+      FutureBuilder<Attachment1>(
+        future: _futureAlbum,
+        builder: (context, snapshot) {
+          if (snapshot.hasData&&bot.attachments[0].type=="DATE_PICKER") {
+            return IconButton(
+              icon: Icon(Icons.calendar_today),
+              onPressed: () async {
+                showDatePicker(
+                    context: context,
+                    initialDate: _dateTime == null ? DateTime.now() : _dateTime,
+                    firstDate: DateTime(2001),
+                    lastDate: DateTime(2021)
+                ).then((date) {
+                  setState(() async{
+                    _dateTime = date;
+                    print(_dateTime);
+
+                    final Attachment1 alb = await createAlbum(_dateTime.toString());
+                    setState(() {
+      print(_dateTime.toString());
+                    });
+                  });
+                });
+              },
+            );
+
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return new Container();
+        },
+      );
+  }
+  Widget futur2 (){
+    return
+      FutureBuilder<Attachment1>(
+        future: _futureAlbum,
+        builder: (context, snapshot) {
+          if (snapshot.hasData&&bot.attachments[0].type=="IMAGE") {
+
+            return Image.network('${bot.attachments[0].filename}',);
+
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -230,6 +301,8 @@ Widget _chatbutton(){
         ),
         new Divider(height: 1.0),
       Container(child: futur(),),
+      Container(child: futur1(),),
+            Container(child: futur2(),),
       Container(child: _visible?_chatbutton():new Container(
         decoration: new BoxDecoration(color: Theme.of(context).cardColor),
         child: _buildTextComposer(),

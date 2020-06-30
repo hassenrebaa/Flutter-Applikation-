@@ -38,7 +38,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   Future<File> get _getLocalFile async {
     final file = await localPath1;
-    return new File('$file/dataxyyx6.txt');
+    return new File('$file/dataxyyx7.txt');
   }
 
 
