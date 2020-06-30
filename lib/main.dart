@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Einstellung.dart';
+import 'Model-json.dart';
 import 'chat.dart';
 import 'infos.dart';
 
@@ -29,23 +30,10 @@ class _HomeState extends State<Home>{
   int _currentIndex = 0;
   var  poo = new ChatDetails();
   final tabs=[
-    Center(
-      child: Column(
-  children: <Widget>[
-    Container(
-      margin: const EdgeInsets.all(70.0),
-      alignment: Alignment.center,
-    child:  CircleAvatar(
-        radius: 100,
-        backgroundImage: AssetImage('Images/bot.png'), // Hier Changes 
-      ),
-    ),
-   Text("Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
-  ],),
-  ),
+    Center(child:FlutterDemo(),),
     Center(child: ChatDetails(),),
     Center(child: MyApp()),
-    Center(child: FlutterDemo(),),
+    Center(child: FlutterDemo1(),),
 
   ];
 

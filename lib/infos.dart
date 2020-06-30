@@ -17,7 +17,7 @@ class FlutterDemo extends StatefulWidget {
 class _FlutterDemoState extends State<FlutterDemo> {
   int _counter;
   String t = "Ich akzeptiere die oben genannten \n Datenschutzhinweise";
-  bool checkBoxState = false;
+  bool checkBox = false;
   bool checkBoxState1 = true;
   bool _isChecked = true;
   @override
@@ -38,7 +38,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   Future<File> get _getLocalFile async {
     final file = await localPath1;
-    return new File('$file/dataxyyx.txt');
+    return new File('$file/dataxyyx7.txt');
   }
 
 
@@ -104,24 +104,11 @@ class _FlutterDemoState extends State<FlutterDemo> {
   Widget build(BuildContext context) {
     return new Scaffold(
 
-      body: Center(
+      body: _counter == 0?
+      Center(
         child:
         ListView(
           children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(top: 30.0),
-              alignment: Alignment.center,
-              child: Text('Impressum\n', style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),),),
-            Container(
-              margin: const EdgeInsets.only(top: 20, left: 50),
-              child: Text(
-                "Chatbot-app\nV.1.1.0\nEntwecklet von:\nBensouda Hanae\nAzlouk Mohamed Yassine\nRebaa Hassen\nMorchid Abdelhamid",
-                style: TextStyle(color: Colors.black54, fontSize: 15),
-              ),
-            ),
             Container(
               margin: const EdgeInsets.only(top: 30.0),
               alignment: Alignment.center,
@@ -150,12 +137,12 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
                       onChanged: (bool value){
                         setState(() =>
-                          this._isChecked = value);
+                          this.checkBox = value);
                         setAllowsNotifications(value);
 
                         },
 
-                        value:_isChecked,
+                        value:checkBox,
 
                       ),
 
@@ -174,11 +161,12 @@ class _FlutterDemoState extends State<FlutterDemo> {
                 onPressed: () {
                   _incrementCounter();
                   print(_counter);
-                  if (_counter == 1) {
+                  if (_counter == 1&&checkBox==true) {
+                    _isChecked= !_isChecked;
                     showAlertDialog(context);
                   }
                   else {
-                    showAlertDialog1(context);
+
                   }
                 },
                 color: Colors.green,
@@ -187,7 +175,22 @@ class _FlutterDemoState extends State<FlutterDemo> {
             ),
           ],
         ),
-      ),
+      ): Center(
+
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.all(70.0),
+              alignment: Alignment.center,
+              child:  CircleAvatar(
+                radius: 100,
+                backgroundImage: AssetImage('Images/bot.png'), // Hier Changes
+              ),
+            ),
+            Text("Hallo! ich bin Roby\nwas kann ich für Sie tun?",style: TextStyle(color: Colors.teal, fontSize: 25,fontWeight: FontWeight.bold),),
+          ],),
+      )
+
 
     );
   }
@@ -217,7 +220,6 @@ class _FlutterDemoState extends State<FlutterDemo> {
       },
     );
   }
-
   void showAlertDialog1(BuildContext context) {
     Widget okButton = FlatButton(
       child: Text("OK"),
@@ -228,8 +230,8 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("danke!"),
-      content: Text("Sie haben schon die Datenschutz abgestimmt !"),
+      title: Text("Achtung!"),
+      content: Text("bitte akzeptieresie  die oben genannten Datenschutzhinweise "),
       actions: [
         okButton,
       ],
