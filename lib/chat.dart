@@ -31,6 +31,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   // final kong = new ChatMessage();
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot ;
+  Attachment1 bot1 ;
   String server="";
   String usr="";
   DateTime _dateTime;
@@ -50,11 +51,10 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       },
       body: jsonEncode({
         "text": '${text}',
-      }),sdddd
+      }),
     );
     final jsonresponse = json.decode(response1.body);
     final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
-
     if (response1.statusCode == 200) {
       print(jsonresponse[0]);
       print(server);
@@ -62,7 +62,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       print(historyID.toString());
       //print(test.attachments[0].type);
       //print(bot.attachments[0].id);
-//      print(futur().toString());
       return test;
     } else {
       throw Exception('Failed to create...');
@@ -132,6 +131,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     ChatMessage message = ChatMessage(
       text: "${bot.text}",
       type: false,
+
     );
 
     setState(() {
@@ -139,18 +139,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
 
     });
   }
-  void response1(String text) async {
-    ChatMessage message = ChatMessage(
-      text: "Hallo, welche Frage zur Veranstaltung kann ich dir beantworten?",
-      type: false,
-    );
-
-    setState(() {
-      _messages.insert(0, message);
-
-    });
-  }
-
 
   void _handleSubmitted(String text) {
     _textController.clear();
@@ -182,19 +170,40 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
         },
       ),);
 
-
   }
+  String manu ="manuell";
+  String bild ="Bild";
   Widget futur (){
     return
       FutureBuilder<Attachment1>(
         future: _futureAlbum,
         builder: (context, snapshot) {
-          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON") {
-            return Text("ok");
+          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON") {
+            return Row(children: <Widget>[RaisedButton(
+              child: Text("manuell") ,
+              onPressed: ()async {
+                final Attachment1 alb1 =  await createAlbum(manu);
+
+                setState(() {
+                  bot1=alb1;
+                  response(bot1.text);
+                });
+                _handleSubmitted(manu);
+              },
+            ),
+              RaisedButton(
+                child: Text("Bild") ,
+                onPressed: ()async {
+                  await createAlbum(bild);
+                  setState(() {
+
+                  });
+                },
+              )],);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return CircularProgressIndicator();
+          return new Container();
         },
       );
   }
@@ -258,9 +267,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     return historyID;
 
   }
-
-
-
 }
 
 
@@ -293,18 +299,8 @@ class ChatMessage extends StatelessWidget {
               child:  Text(text),
 
             ),
-            /* Container(
-              child:FutureBuilder<Attachment1>(
-                future:pop._futureAlbum,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData&&pop.bot.attachments[0].type=="BUTTON") {
-                    return Text("ok");
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return CircularProgressIndicator();
-                },
-              ) ,
+            /* Container( child:
+            Text( "${pop.futur()}")
             ),*/
             // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
             /*   new RaisedButton(child:Text ("m"), onPressed: (){
@@ -353,7 +349,6 @@ class ChatMessage extends StatelessWidget {
       Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
-
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
           this.type ? myMessage(context) : otherMessage(context),
