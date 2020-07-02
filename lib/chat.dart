@@ -198,8 +198,8 @@ Widget _chatbutton(){
               Container(
                 margin: EdgeInsets.all(20.00),
                 child: RaisedButton(
-                 
-            child: Text("manuell") ,
+
+            child: Text('${bot.attachments[0].title}') ,
           onPressed: ()async {
             final Attachment1 alb= await createAlbum("$manu");
 

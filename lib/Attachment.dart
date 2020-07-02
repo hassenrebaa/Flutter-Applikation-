@@ -22,7 +22,7 @@ class Attachment1 {
   });
 
   dynamic requestText;
-  String text;
+  String text;l
   dynamic accessToken;
   List<Attachment> attachments;
   dynamic action;
