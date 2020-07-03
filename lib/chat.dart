@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutterapp/Attachment.dart';
 import 'dart:async';
@@ -28,7 +28,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   var  pong = new _LoginPageState();
   final List<Attachment1> att = new List();
   final List<ChatMessage> _messages = <ChatMessage>[];
- // final kong = new ChatMessage();
+  // final kong = new ChatMessage();
   final TextEditingController _textController = TextEditingController();
   Attachment1 bot ;
   Attachment1 bot1 ;
@@ -55,7 +55,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       }),
     );
     final jsonresponse = json.decode(response1.body);
- final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
+    final Attachment1 test =Attachment1.fromJson(jsonresponse[0]);
 
     if (response1.statusCode == 200) {
       print(jsonresponse[0]);
@@ -75,7 +75,6 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       data: IconThemeData(color: Theme.of(context).accentColor),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
-
         child: Row(
           children: <Widget>[
             Flexible(
@@ -162,74 +161,120 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     });
     response(text);
   }
-Widget _chatbutton(){
-  return SizedBox(
-    width: 150,
-    height: 70,
-    child: RaisedButton(
-    color: Colors.blueAccent,
-    child: Text("Chat starten!"),
-    onPressed: ()async {
-      final Attachment1 alb = await createAlbum(txt);
-      setState(() {
-        bot= alb;
-        response(bot.text);
-        _visible = !_visible;
-      });
-      // Call setState. This tells Flutter to rebuild the
-      // UI with the changes.
-    },
-  ),);
+  Widget _chatbutton(){
+    return SizedBox(
+      width: 150,
+      height: 70,
+      child: RaisedButton(
+        color: Colors.blueAccent,
+        child: Text("Chat starten!"),
+        onPressed: ()async {
+          final Attachment1 alb = await createAlbum(txt);
+          setState(() {
+            bot= alb;
+            response(bot.text);
+
+            _visible = !_visible;
+          });
+          // Call setState. This tells Flutter to rebuild the
+          // UI with the changes.
+        },
+      ),);
 
 
-}
-  String manu ="manuell";
-  String bild ="Bild";
-  Widget futur (){
+  }
+
+
+  Widget futur3(){
     return
       FutureBuilder<Attachment1>(
         future: _futureAlbum,
         builder: (context, snapshot) {
-          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON") {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+               if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON"&&bot.attachments[2].type=="BUTTON") {
+               return Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: <Widget>[
+                   Container(
+                     margin: EdgeInsets.all(20.00),
+                     child: RaisedButton(
+                       child: Text('${bot.attachments[0].title}') ,
+                       onPressed: ()async {
+                         final Attachment1 alb= await createAlbum('${bot.attachments[0].title}');
+                         setState(() {
+                           bot=alb;
+                           _handleSubmitted(txt);
+                         });
 
-              children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(20.00),
-                child: RaisedButton(
+                       },
+                     ),
+                   ),
+                   Container(
+                     margin: EdgeInsets.all(20.00),
+                     child: RaisedButton(
+                       child: Text('${bot.attachments[1].title}') ,
+                       onPressed: ()async {
+                         await createAlbum('${bot.attachments[1].title}');
+                         setState(() {
+                           _handleSubmitted(txt);
+                         });
+                       },
+                     ),
+                   ),
+                   Container(
+                     margin: EdgeInsets.all(20.00),
+                     child: RaisedButton(
+                       child: Text('${bot.attachments[2].title}') ,
+                       onPressed: ()async {
+                         await createAlbum('${bot.attachments[2].title}');
+                         setState(() {
+                           response(bot.text);
+                           _handleSubmitted(txt);
 
-            child: Text('${bot.attachments[0].title}') ,
-          onPressed: ()async {
-            final Attachment1 alb= await createAlbum("$manu");
+                         });
+                       },
+                     ),
+                   )],);
+               } else if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON") {
+                 return Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: <Widget>[
+                     Container(
+                       margin: EdgeInsets.all(20.00),
+                       child: RaisedButton(
 
-         setState(() {
-        bot=alb;
-          });
-         _handleSubmitted(txt);
-          },
-          ),
-              ),
-          Container(
-            margin: EdgeInsets.all(20.00),
-            child: RaisedButton(
-            child: Text("Bild") ,
-            onPressed: ()async {
-            await createAlbum('${bot.attachments[0].action}');
-            setState(() {
-              response(bot.text);
-            });
-            },
-            ),
-          )],);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
+                         child: Text('${bot.attachments[0].action}') ,
+                         onPressed: ()async {
+                           final Attachment1 alb= await createAlbum('${bot.attachments[0].action}');
+
+                           setState(() {
+                             bot=alb;
+                           });
+                           _handleSubmitted(txt);
+                         },
+                       ),
+                     ),
+                     Container(
+                       margin: EdgeInsets.all(20.00),
+                       child: RaisedButton(
+                         child: Text('${bot.attachments[1].title}') ,
+                         onPressed: ()async {
+                           await createAlbum('${bot.attachments[1].action}');
+                           setState(() {
+                             response(bot.text);
+                           });
+                         },
+                       ),
+                     )],);
+               }
+             else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
           return new Container();
         },
       );
   }
-  Widget futur1 (){
+
+  Widget futur1(){
     return
       FutureBuilder<Attachment1>(
         future: _futureAlbum,
@@ -247,10 +292,9 @@ Widget _chatbutton(){
                   setState(() async{
                     _dateTime = date;
                     print(_dateTime);
-
                     final Attachment1 alb = await createAlbum(_dateTime.toString());
                     setState(() {
-      print(_dateTime.toString());
+                      print(_dateTime.toString());
                     });
                   });
                 });
@@ -270,9 +314,7 @@ Widget _chatbutton(){
         future: _futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.hasData&&bot.attachments[0].type=="IMAGE") {
-
             return Image.network('${bot.attachments[0].filename}',);
-
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -290,34 +332,35 @@ Widget _chatbutton(){
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-        new Expanded(
-            child: new ListView.builder(
-              padding: new EdgeInsets.all(8.0),
-              reverse: true,
-              shrinkWrap: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
-            )
-        ),
-        new Divider(height: 1.0),
-      Container(child: futur(),),
-      Container(child: futur1(),),
+            new Expanded(
+                child: new ListView.builder(
+                  padding: new EdgeInsets.all(8.0),
+                  reverse: true,
+                  shrinkWrap: true,
+                  itemBuilder: (_, int index) => _messages[index],
+                  itemCount: _messages.length,
+                )
+            ),
+            new Divider(height: 1.0),
+
+            Container(child: futur1(),),
             Container(child: futur2(),),
-      Container(child: _visible?_chatbutton():new Container(
-        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-        child: _buildTextComposer(),
-      ),
-    ),
+            Container(child: futur3(),),
+            Container(child: _visible?_chatbutton():new Container(
+              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
+            ),
+            ),
 
 
-      ]),
+          ]),
     );
   }
 
 
-texto1()async{
+  texto1()async{
 
-  await pong.readData().then((String data) => server=data);
+    await pong.readData().then((String data) => server=data);
 
 
   }
@@ -327,17 +370,17 @@ texto1()async{
 
   }
 
-    @override
+  @override
   void initState() {
-      //createAlbum(txt);
+    //createAlbum(txt);
     super.initState();
     texto1();
     texto2();
     id();
-    futur();
+
   }
-String historyID="";
-   String id(){
+  String historyID="";
+  String id(){
     historyID= randomString(10);
     return historyID;
 
@@ -354,7 +397,7 @@ class ChatMessage extends StatelessWidget {
 
   final String text;
   final bool type;
- _HomePageDialogflowV2 pop =new  _HomePageDialogflowV2();
+  _HomePageDialogflowV2 pop =new  _HomePageDialogflowV2();
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -374,11 +417,11 @@ class ChatMessage extends StatelessWidget {
               child:  Text(text),
 
             ),
-           /* Container( child:
+            /* Container( child:
             Text( "${pop.futur()}")
             ),*/
-      // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
-         /*   new RaisedButton(child:Text ("m"), onPressed: (){
+            // pop.bot.attachments!=null&&pop.bot.attachments[0].type=="BUTTON"?new RaisedButton(child:Text ("m"), onPressed: null):new Container()
+            /*   new RaisedButton(child:Text ("m"), onPressed: (){
 
              print(pop.bot.attachments[0].type);
             }
@@ -419,17 +462,17 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-return
+    return
 
-    Container(
-    margin: const EdgeInsets.symmetric(vertical: 10.0),
-    child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children:
-    this.type ? myMessage(context) : otherMessage(context),
-    ),
-    );
- }
+      Container(
+        margin: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+          this.type ? myMessage(context) : otherMessage(context),
+        ),
+      );
+  }
 }
 class LoginPage extends StatefulWidget {
   @override
@@ -448,7 +491,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController benutzerController = new TextEditingController();
   var  urlserver="";
   var  username="";
-   texto() async{
+  texto() async{
 
     readData().then((String data){
       setState(() {
@@ -456,7 +499,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       return urlserver;
     });
-}
+  }
   textou() async{
 
     readData1().then((String data){
@@ -469,8 +512,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void initState() {
     super.initState();
-   texto();
-   textou();
+    texto();
+    textou();
   }
   @override
   Widget build(BuildContext context) {
@@ -495,58 +538,58 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                   TextFormField(
-                    validator: (input) {
-                      if (input.isEmpty) {
-                        return 'Provide an Sever URL';
-                      }
-                    },
-                    controller: serverController,
-                    decoration: InputDecoration(
-                      hintText: urlserver,
-                      icon: Icon(Icons.link),
-                    ),
-                    onSaved: (input) => _URL= input,
-                  ),
-
-                Container(
-                  padding: EdgeInsets.only(top: 10,bottom: 10),
-                  height: 70,
-                  child:
                 TextFormField(
                   validator: (input) {
                     if (input.isEmpty) {
-                      return 'Provide an Benutzername';
+                      return 'Provide an Sever URL';
                     }
                   },
-                  controller: benutzerController,
-
+                  controller: serverController,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: username,
+                    hintText: urlserver,
+                    icon: Icon(Icons.link),
                   ),
-                  onSaved: (input) => _Benutzername = input,
+                  onSaved: (input) => _URL= input,
                 ),
 
-
-                  ),
                 Container(
                   padding: EdgeInsets.only(top: 10,bottom: 10),
                   height: 70,
                   child:
-                TextFormField(
-                  validator: (input) {
-                    if (input.length < 6) {
-                      return 'Longer password please';
-                    }
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    icon: Icon(Icons.lock),
+                  TextFormField(
+                    validator: (input) {
+                      if (input.isEmpty) {
+                        return 'Provide an Benutzername';
+                      }
+                    },
+                    controller: benutzerController,
+
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.person),
+                      hintText: username,
+                    ),
+                    onSaved: (input) => _Benutzername = input,
                   ),
-                  onSaved: (input) => _password = input,
-                  obscureText: true,
+
+
                 ),
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                  height: 70,
+                  child:
+                  TextFormField(
+                    validator: (input) {
+                      if (input.length < 6) {
+                        return 'Longer password please';
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      icon: Icon(Icons.lock),
+                    ),
+                    onSaved: (input) => _password = input,
+                    obscureText: true,
+                  ),
 
                 ),
 
@@ -609,4 +652,3 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 }
-
