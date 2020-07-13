@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapp/test-save.dart';
 import 'Einstellung.dart';
 import 'Model-json.dart';
 import 'chat.dart';
+import 'infos.dart';
 
-
-
-
-void main()  => runApp(
-    MaterialApp(
-        title : 'Energie App',
-        home: Home()));
-
+void main() {
+    runApp(
+        MaterialApp(
+            title: 'Energie App',
+            home: Home()));
+  }
 /// This Widget is the main application widget.
 class Home extends StatefulWidget {
 
@@ -47,6 +45,7 @@ class _HomeState extends State<Home>{
       ),
       body:tabs[_currentIndex],
       bottomNavigationBar:BottomNavigationBar(
+
           currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         items: [
