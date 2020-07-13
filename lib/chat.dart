@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutterapp/Attachment.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -8,8 +9,11 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:random_string/random_string.dart';
-
+import 'package:video_player/video_player.dart';
 import 'Attachment.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:link/link.dart';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 
 class ChatDetails extends StatefulWidget {
   ChatDetails({
@@ -39,6 +43,8 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
   String txt = "";
   Future<Attachment1> _futureAlbum;
   bool block =true;
+  VideoPlayerController _controller;
+  Future<void> _initializeVideoPlayerFuture;
 
   Future<Attachment1> createAlbum(String text) async {
 
@@ -92,8 +98,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed:  () async{
-
-                  _futureAlbum = createAlbum(_textController.text);
+                 _futureAlbum = createAlbum(_textController.text);
                   final Attachment1 alb = await createAlbum(_textController.text);
 
                   setState(() {
@@ -108,45 +113,59 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                 },
               ),
             ),
-            /*Container(child:  IconButton(
-              icon: Icon(Icons.calendar_today),
-              onPressed: () async {
-                showDatePicker(
-                    context: context,
-                    initialDate: _dateTime == null ? DateTime.now() : _dateTime,
-                    firstDate: DateTime(2001),
-                    lastDate: DateTime(2021)
-                ).then((date) {
-                  setState(() async{
-                    _dateTime = date;
-                    print(_dateTime);
 
-                    final Attachment1 alb = await createAlbum(_dateTime.toString());
-               setState(() {
-               bot= alb;
-               response(bot.text);
-                  });
-                  });
-                });
-
-              },
-            ),
-            )*/
           ],
         ),
       ),
     );
   }
-  void response(query) async {
 
+  void response(query)  {
     ChatMessage message = ChatMessage(
-      text: "${bot.text}",
+      text:bot.text,
       type: false,
+      cool: bot.attachments[0].type=="BUTTON"&&bot.attachments!=null?ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemCount:bot.attachments.length,
+          itemBuilder: (context, index) {
 
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    height: 20,
+                    margin: EdgeInsets.all(20.00),
+                    child: bot.attachments[index].type=="BUTTON"&&bot.attachments!=null?RaisedButton(
+                      onPressed: () async {
+                        _futureAlbum = createAlbum("${bot.attachments[index].title}");
+                        final Attachment1 alb = await createAlbum("${bot
+                            .attachments[index].title}");
+
+                        setState(() {
+                          bot = alb;
+                          response(bot.text);
+                          block = block;
+                        });
+                      },
+                      child: Text("${this.bot.attachments[index].title}"),
+
+                    ):new Container(),
+                ),
+              ],
+            );
+          }
+
+      ):null,
+      cool1:bot.attachments[0].type=="DATE_PICKER"&&bot.attachments!=null?futur1():null,
+      cool2: bot.attachments[0].type=="IMAGE"&&bot.attachments!=null?futur3():null,
+      cool3: bot.attachments[0].type=="VIDEO"&&bot.attachments!=null?futurvid():null,
+      cool4: bot.attachments[0].type=="LINK"&&bot.attachments!=null?futurlink():null,
     );
 
     setState(() {
       _messages.insert(0, message);
+
 
     });
   }
@@ -156,11 +175,13 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     ChatMessage message = ChatMessage(
       text: text,
       type: true,
+
     );
     setState(() {
-      _messages.insert(0, message,);
+      _messages.insert(0, message);
     });
     response(text);
+
   }
 Widget _chatbutton(){
   return SizedBox(
@@ -170,10 +191,12 @@ Widget _chatbutton(){
     color: Colors.blueAccent,
     child: Text("Chat starten!"),
     onPressed: ()async {
+      _futureAlbum = createAlbum(txt);
       final Attachment1 alb = await createAlbum(txt);
       setState(() {
         bot= alb;
         response(bot.text);
+
         _visible = !_visible;
       });
       // Call setState. This tells Flutter to rebuild the
@@ -183,58 +206,13 @@ Widget _chatbutton(){
 
 
 }
-  String manu ="manuell";
-  String bild ="Bild";
-  Widget futur (){
-    return
-      FutureBuilder<Attachment1>(
-        future: _futureAlbum,
-        builder: (context, snapshot) {
-          if (snapshot.hasData&&bot.attachments[0].type=="BUTTON"&&bot.attachments[1].type=="BUTTON") {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
 
-              children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(20.00),
-                child: RaisedButton(
-                 
-            child: Text("manuell") ,
-          onPressed: ()async {
-            final Attachment1 alb= await createAlbum("$manu");
-
-         setState(() {
-        bot=alb;
-          });
-         _handleSubmitted(txt);
-          },
-          ),
-              ),
-          Container(
-            margin: EdgeInsets.all(20.00),
-            child: RaisedButton(
-            child: Text("Bild") ,
-            onPressed: ()async {
-            await createAlbum('${bot.attachments[0].action}');
-            setState(() {
-              response(bot.text);
-            });
-            },
-            ),
-          )],);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return new Container();
-        },
-      );
-  }
   Widget futur1 (){
     return
       FutureBuilder<Attachment1>(
         future: _futureAlbum,
         builder: (context, snapshot) {
-          if (snapshot.hasData&&bot.attachments[0].type=="DATE_PICKER") {
+          if (snapshot.hasData && bot.attachments[0].type == "DATE_PICKER") {
             return IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () async {
@@ -244,44 +222,37 @@ Widget _chatbutton(){
                     firstDate: DateTime(2001),
                     lastDate: DateTime(2021)
                 ).then((date) {
-                  setState(() async{
+                  setState(() async {
                     _dateTime = date;
                     print(_dateTime);
+                    block = block;
 
-                    final Attachment1 alb = await createAlbum(_dateTime.toString());
+                    final Attachment1 alb = await createAlbum(_dateTime
+                        .toString());
                     setState(() {
-      print(_dateTime.toString());
+                      print(_dateTime.toString());
                     });
                   });
                 });
               },
             );
-
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
           return new Container();
-        },
-      );
-  }
-  Widget futur2 (){
-    return
-      FutureBuilder<Attachment1>(
-        future: _futureAlbum,
-        builder: (context, snapshot) {
-          if (snapshot.hasData&&bot.attachments[0].type=="IMAGE") {
 
-            return Image.network('${bot.attachments[0].filename}',);
-
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return new Container();
-        },
+          },
       );
   }
 
+Widget futur3(){
+    if(bot.attachments[0].type=="IMAGE") {
+      return
+        Image.network('${bot.attachments[0].filename}',);
 
+    }
+    return new Container();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -300,9 +271,8 @@ Widget _chatbutton(){
             )
         ),
         new Divider(height: 1.0),
-      Container(child: futur(),),
-      Container(child: futur1(),),
-            Container(child: futur2(),),
+    //  Container(child: futur(),),
+      //Container(child: futur1(),),Container(child: futur2(),),
       Container(child: _visible?_chatbutton():new Container(
         decoration: new BoxDecoration(color: Theme.of(context).cardColor),
         child: _buildTextComposer(),
@@ -329,12 +299,18 @@ texto1()async{
 
     @override
   void initState() {
-      //createAlbum(txt);
+      createAlbum(txt);
+      /*_controller = bot.attachments[0].type=="VIDEO"?VideoPlayerController.network(
+        "${bot.attachments[0].filename}",
+      ):null;
+      _initializeVideoPlayerFuture = _controller.initialize();
+
+      // Use the controller to loop the video.
+      _controller.setLooping(true);*/
     super.initState();
     texto1();
     texto2();
     id();
-    futur();
   }
 String historyID="";
    String id(){
@@ -342,6 +318,90 @@ String historyID="";
     return historyID;
 
   }
+  void dispose() {
+    // Ensure disposing of the VideoPlayerController to free up resources.
+    _controller.dispose();
+
+    super.dispose();
+  }
+  futurvid(){
+    return FutureBuilder(
+      future: _initializeVideoPlayerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done&&bot.attachments[0].type=="VIDEO") {
+          return AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            // Use the VideoPlayer widget to display the video.
+            child: VideoPlayer(_controller),
+          );
+        } else {
+
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+
+
+  }
+
+
+
+
+  Widget futur6(){
+    return
+      ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemCount:bot.attachments.length,
+          itemBuilder: (context, index) {
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: 20,
+                  margin: EdgeInsets.all(20.00),
+                  child: bot.attachments[index].type=="BUTTON"?RaisedButton(
+                    onPressed: () async {
+                      _futureAlbum = createAlbum("${bot.attachments[index].title}");
+                      final Attachment1 alb = await createAlbum("${bot
+                          .attachments[index].title}");
+
+                      setState(() {
+                        bot = alb;
+                        response(bot.text);
+                        block = block;
+                      });
+                    },
+                    child: Text("${bot.attachments[index].title}"),
+
+                  ):new Container()
+                ),
+
+              ],);
+          }
+
+      );
+
+  }
+  void _showErrorSnackBar() {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Oops... the URL couldn\'t be opened!'),
+      ),
+    );
+  }
+  futurlink(){
+     return new Link(
+         child: new Text('${bot.attachments[0].title}'),
+         url:'${bot.attachments[0].link}',
+        onError: _showErrorSnackBar,
+     );
+
+
+  }
+  
+
 }
 
 
@@ -350,11 +410,21 @@ class ChatMessage extends StatelessWidget {
     this.text,
     this.type,
     this.pop,
+    this.cool,
+    this.cool1,
+    this.cool2,
+    this.cool3,
+    this.cool4
   });
 
   final String text;
   final bool type;
- _HomePageDialogflowV2 pop =new  _HomePageDialogflowV2();
+ final _HomePageDialogflowV2 pop;
+  dynamic cool;
+  dynamic cool1;
+  dynamic cool2;
+  dynamic cool3;
+  dynamic cool4;
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -371,9 +441,14 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
 
             Container(
-              child:  Text(text),
+              child:  new Html (data: text,),
 
             ),
+           Container(child:cool,),
+            Container(child:cool1,),
+            Container(child:cool2,),
+            Container(child:cool3,),
+            Container(child:cool4,)
            /* Container( child:
             Text( "${pop.futur()}")
             ),*/

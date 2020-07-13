@@ -38,6 +38,10 @@ dependencies:
   path_provider: 1.6.10
   shared_preferences: 0.4.3
   random_string: 2.0.1
+  flutter_html: ^1.0.0-pre.1
+  video_player: 0.10.11
+  link: ^1.0.0
+  date_range_picker: ^1.0.3
 
 
 
