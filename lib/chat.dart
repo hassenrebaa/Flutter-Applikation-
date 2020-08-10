@@ -105,7 +105,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
                     bot= alb;
                     for(int i =0;i<bot.attachments.length;i++) {
                       if (bot.attachments[i].type == "LOCK_INPUT"||bot.attachments[i].type == "DATE_PICKER") {
-                        block = !block;
+                        block = block;
                       }
                     }
                   });
@@ -119,49 +119,92 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
       ),
     );
   }
+  future11(){
+  return
+ bot.attachments[0].type=="BUTTON"?ListView.builder(
+  shrinkWrap: true,
+  scrollDirection: Axis.vertical,
+  itemCount:bot.attachments.length,
+  itemBuilder: (context, index) {
 
-  void response(query)  {
+  return Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+  Container(
+  height: 20,
+  margin: EdgeInsets.all(20.00),
+  child: bot.attachments[index].type=="BUTTON"&&bot.attachments!=null?RaisedButton(
+  onPressed: () async {
+  _futureAlbum = createAlbum("${bot.attachments[index].title}");
+  final Attachment1 alb = await createAlbum("${bot
+      .attachments[index].title}");
+
+  setState(() {
+  bot = alb;
+  response(bot.text,false);
+  block = block;
+  });
+  },
+  child: Text("${this.bot.attachments[index].title}"),
+
+  ):new Container(),
+  ),
+  ],
+  );
+  }
+
+  ):Container();
+
+
+
+
+}
+
+  void response(String text, bool type,{dynamic cool,})  {
     ChatMessage message = ChatMessage(
-      text:bot.text,
+        text:bot.text,
       type: false,
-      cool: bot.attachments[0].type=="BUTTON"&&bot.attachments!=null?ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemCount:bot.attachments.length,
-          itemBuilder: (context, index) {
-
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    height: 20,
-                    margin: EdgeInsets.all(20.00),
-                    child: bot.attachments[index].type=="BUTTON"&&bot.attachments!=null?RaisedButton(
-                      onPressed: () async {
-                        _futureAlbum = createAlbum("${bot.attachments[index].title}");
-                        final Attachment1 alb = await createAlbum("${bot
-                            .attachments[index].title}");
-
-                        setState(() {
-                          bot = alb;
-                          response(bot.text);
-                          block = block;
-                        });
-                      },
-                      child: Text("${this.bot.attachments[index].title}"),
-
-                    ):new Container(),
-                ),
-              ],
-            );
-          }
-
-      ):null,
-      cool1:bot.attachments[0].type=="DATE_PICKER"&&bot.attachments!=null?futur1():null,
-      cool2: bot.attachments[0].type=="IMAGE"&&bot.attachments!=null?futur3():null,
-      cool3: bot.attachments[0].type=="VIDEO"&&bot.attachments!=null?futurvid():null,
-      cool4: bot.attachments[0].type=="LINK"&&bot.attachments!=null?futurlink():null,
-    );
+    cool: null,);
+      if (bot.attachments!=null&&bot.attachments[0].type=="BUTTON"){
+        message =  ChatMessage(
+          text:bot.text,
+          type: false,
+        cool: future11(),
+        );
+    }
+    if (bot.attachments!=null&&bot.attachments[0].type=="DATE_PICKER"){
+      message =  ChatMessage(
+        text:bot.text,
+        type: false,
+        cool: futur1(),
+      );
+    }
+    if (bot.attachments!=null&&bot.attachments[0].type=="IMAGE"){
+      message =  ChatMessage(
+        text:bot.text,
+        type: false,
+        cool: futur3(),
+      );
+    }
+    if (bot.attachments!=null&&bot.attachments[0].type=="VIDEO"){
+      message =  ChatMessage(
+        text:bot.text,
+        type: false,
+        cool: futurvid(),
+      );
+    }
+    if (bot.attachments!=null&&bot.attachments[0].type=="LINK"){
+      message =  ChatMessage(
+        text:bot.text,
+        type: false,
+        cool: futurlink(),
+      );
+    }
+      /*cool: bot.attachments!=null&&bot.attachments[0].type=="BUTTON"?future11():null,
+      cool1:bot.attachments!=null&&bot.attachments[0].type=="DATE_PICKER"?futur1():null,
+      cool2: bot.attachments!=null&&bot.attachments[0].type=="IMAGE"?futur3():null,
+      cool3: bot.attachments!=null&&bot.attachments[0].type=="VIDEO"?futurvid():null,
+      cool4: bot.attachments!=null&&bot.attachments[0].type=="LINK"?futurlink():null*/
 
     setState(() {
       _messages.insert(0, message);
@@ -180,7 +223,7 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
     setState(() {
       _messages.insert(0, message);
     });
-    response(text);
+    response(text,true);
 
   }
 Widget _chatbutton(){
@@ -195,7 +238,7 @@ Widget _chatbutton(){
       final Attachment1 alb = await createAlbum(txt);
       setState(() {
         bot= alb;
-        response(bot.text);
+        response(bot.text,false);
 
         _visible = !_visible;
       });
@@ -369,7 +412,7 @@ String historyID="";
 
                       setState(() {
                         bot = alb;
-                        response(bot.text);
+                        response(bot.text,false);
                         block = block;
                       });
                     },
@@ -405,22 +448,13 @@ class ChatMessage extends StatelessWidget {
   ChatMessage({
     this.text,
     this.type,
-    this.pop,
     this.cool,
-    this.cool1,
-    this.cool2,
-    this.cool3,
-    this.cool4
+
   });
 
   final String text;
   final bool type;
- final _HomePageDialogflowV2 pop;
   dynamic cool;
-  dynamic cool1;
-  dynamic cool2;
-  dynamic cool3;
-  dynamic cool4;
   List<Widget> otherMessage(context) {
     return <Widget>[
       Container(
@@ -438,13 +472,8 @@ class ChatMessage extends StatelessWidget {
 
             Container(
               child:  new Html (data: text,),
-
             ),
-           Container(child:cool,),
-            Container(child:cool1,),
-            Container(child:cool2,),
-            Container(child:cool3,),
-            Container(child:cool4,)
+           //Container(child:cool==null?Container():cool,),
            /* Container( child:
             Text( "${pop.futur()}")
             ),*/
