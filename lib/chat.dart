@@ -397,11 +397,7 @@ String historyID="";
          url:'${bot.attachments[0].link}',
         onError: _showErrorSnackBar,
      );
-
-
   }
-  
-
 }
 
 
