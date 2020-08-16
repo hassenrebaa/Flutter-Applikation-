@@ -383,12 +383,7 @@ String historyID="";
         }
       },
     );
-
-
-  }
-
-
-
+   }
 
   Widget futur6(){
     return
