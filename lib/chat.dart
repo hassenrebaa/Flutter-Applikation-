@@ -468,7 +468,7 @@ class ChatMessage extends StatelessWidget {
             Container(
               child:  new Html (data: text,),
             ),
-           //Container(child:cool==null?Container():cool,),
+           Container(child:cool==null?Container():cool,),
            /* Container( child:
             Text( "${pop.futur()}")
             ),*/
