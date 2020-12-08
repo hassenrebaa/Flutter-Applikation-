@@ -200,8 +200,9 @@ class _HomePageDialogflowV2 extends State<ChatDetails> {
         cool: futurlink(),
       );
     }
-      /*cool: bot.attachments!=null&&bot.attachments[0].type=="BUTTON"?future11():null,
-      cool1:bot.attachments!=null&&bot.attachments[0].type=="DATE_PICKER"?futur1():null,
+      cool: bot.attachments!=null&&bot.attachments[0].type=="BUTTON"?future11():null;
+
+       /*cool1:bot.attachments!=null&&bot.attachments[0].type=="DATE_PICKER"?futur1():null,
       cool2: bot.attachments!=null&&bot.attachments[0].type=="IMAGE"?futur3():null,
       cool3: bot.attachments!=null&&bot.attachments[0].type=="VIDEO"?futurvid():null,
       cool4: bot.attachments!=null&&bot.attachments[0].type=="LINK"?futurlink():null*/
